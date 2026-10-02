@@ -113,7 +113,7 @@ Each trial is triggered when the player tries to `take` the lens in that room. A
 | `inventory` | Show all items currently carried |
 | `charge` | Show the ring's current charge level |
 | `help` | List all commands with short descriptions |
-| `save` | Save the current game state to a file |
+| `save_load.py` | Save the current game state to a file |
 | `load` | Load the previously saved game state |
 | `quit` / `exit` | Exit the game loop |
 

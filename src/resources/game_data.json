@@ -2,36 +2,51 @@
   "Guardian Citadel": {
     "description": "The ancient seat of the Guardians, humming with green light.",
     "exits": { "east": "Corps Armory" },
-    "items": []
+    "items": [],
+    "locked" : false
   },
 
   "Corps Armory": {
     "description": "Racks of dormant lantern batteries line the walls.",
-    "exits": { "west": "Guardian Citadel" },
+    "exits": { "west": "Guardian Citadel", "east" : "Hall of Lanterns" },
     "items": ["spare battery", "Guardian scroll"]
   },
 
   "Hall of Lanterns": {
-    "description" : "",
-    "exists" : {},
-    "items" : []
+    "description" : "A vast hall lined with the glowing emblems of fallen and living Lanterns. Four passages branch away from a central dais.",
+    "exits" : {
+      "west" : "Corps Armory",
+      "north" : "Will Forge",
+      "south" : "Garden of Mogo",
+      "east" : "Void of Fear"
+    },
+    "items" : ["lantern oath tablet"]
   },
 
   "Will Forge" : {
-    "description" : "",
-    "exists" : {},
-    "items" : []
+    "description" : "Molten green energy pours through channels in the floor. The air presses against your ring, daring you to falter.",
+    "exits" : {"south": "Hall of Lanterns" },
+    "items" : ["Lens of Will"]
+  },
+
+  "Garden of Mogo": {
+    "description": "A living garden on the sentient planet Mogo. Half the plants are wilting, and a faint blue glow pulses at the centre.",
+    "exits": { "north": "Hall of Lanterns" },
+    "items": ["Lens of Hope"],
+    "locked": false
   },
 
   "Void of Fear" : {
-    "description" : "",
-    "exists" : {},
-    "items" : []
+    "description" : "Darkness swallows the walls. Your ring flickers, and something unseen whispers just behind you.",
+    "exits" : {"west": "Hall of Lanterns", "east": "Central Power Battery Chamber"},
+    "items" : ["Lens of Resolve"],
+    "locked" : false
   },
 
   "Central Power Battery Chamber" : {
-    "description" : "",
-    "exists" : {},
-    "items" : []
+    "description" : "The Central Power Battery towers above you, a colossal lantern blazing with the light of a billion wills.",
+    "exits" : {"west": "Void of Fear"},
+    "items" : [],
+    "locked" : true
   }
 }
