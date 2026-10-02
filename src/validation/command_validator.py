@@ -1,4 +1,4 @@
-class Validator:
+class CommandValidator:
     def __init__(self):
         self.valid_commands = ["go" , "look" , "take" , "use" , "inventory" , "charge" , "help" , "save" , "load" , "quit" , "exit"]
         self.valid_directions = ["north" , "south" , "west" , "east"]
@@ -31,6 +31,10 @@ class Validator:
             if command[1] not in self.valid_directions:
                 return False
 
+        return True
+
+    def validate_character(self, character: str) -> bool:
+        """TODO"""
         return True
 
 

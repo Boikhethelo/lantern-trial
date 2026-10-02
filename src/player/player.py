@@ -10,36 +10,32 @@ class Player:
         self._items = []
         self._score = 0
 
-        def get_name(self ) -> str:
-            return self._name
+    def get_name(self ) -> str:
+        return self._name
 
-        def get_strength(self) -> str:
-            return self._strength
+    def get_strength(self) -> str:
+        return self._strength
 
-        def get_weakness(self) -> str:
-            return self._weakness
+    def get_weakness(self) -> str:
+        return self._weakness
 
-        def get_position(self) -> str:
-            return self._position
+    def get_position(self) -> str:
+        return self._position
 
-        def set_position(self, position: str):
-            self._position = position
+    def set_position(self, position: str):
+        self._position = position
 
-        def get_items(self) -> str:
-            return self._items
+    def get_items(self) -> str:
+        return self._items
 
-        def get_score(self) -> int:
-            return self._score
+    def get_score(self) -> int:
+        return self._score
 
+    def add_item(self, item : str):
+        self._items += item
 
-        def set_position(self, position: str):
-            self._position = position
-
-        def add_item(self, item : str):
-            self._items += item
-
-        def add_score(self, score: int):
-            self._score += score
+    def add_score(self, score: int):
+        self._score += score
 
 
 

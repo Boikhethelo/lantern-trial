@@ -12,10 +12,10 @@ class PlayerDAO:
             data = json.load(characters)
 
         chosen_character = data[self._name]
-        name = chosen_character["name"]
-        sector = chosen_character["sector"]
-        strength = chosen_character["strength"]
-        weakness = chosen_character["weakness"]
+        name = self._name
+        sector = chosen_character.get("sector")
+        strength = chosen_character.get("strength")
+        weakness = chosen_character.get("weakness")
 
         return Player(name, sector, strength, weakness)
 

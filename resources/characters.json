@@ -1,22 +1,22 @@
 {
   "Hal Jordan": {
     "sector": "2814",
-    "Strength": "Fearless",
-    "Weakness": "Reckless"
+    "strength": "Fearless",
+    "weakness": "Reckless"
   },
   "John Stewart": {
     "sector": "2814",
     "Strength": "Disciplined",
-    "Weakness": "Haunted by Past Failures"
+    "weakness": "Haunted by Past Failures"
   },
   "Jessica Cruz": {
     "sector": "2814",
-    "Strength": "Resilient",
-    "Weakness": "Crippling Anxiety"
+    "strength": "Resilient",
+    "weakness": "Crippling Anxiety"
   },
   "Kilowog": {
     "sector": "674",
-    "Strength": "Mentor and Tough",
-    "Weakness": "Short Temper"
+    "strength": "Mentor and Tough",
+    "weakness": "Short Temper"
   }
 }

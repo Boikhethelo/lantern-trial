@@ -9,7 +9,8 @@
   "Corps Armory": {
     "description": "Racks of dormant lantern batteries line the walls.",
     "exits": { "west": "Guardian Citadel", "east" : "Hall of Lanterns" },
-    "items": ["spare battery", "Guardian scroll"]
+    "items": ["spare battery", "Guardian scroll"],
+    "locked" : false
   },
 
   "Hall of Lanterns": {
