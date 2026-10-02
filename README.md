@@ -24,30 +24,13 @@ To win the game, players must:
 
 ```text
 lantern_trial/
-├── game.py               # Main game loop
-├── player.py             # Player class and character logic
-├── room.py               # Room class
-├── commands.py           # Commands class
-├── game_data.json        # Prebuilt map and item locations
-├── characters.txt        # Your custom Lantern list (5 minimum)
-├── save_load.py          # File I/O save/load logic
-├── LanternTrails.md      # Instructions on how to play the game (DO NOT EDIT)
+
 ```
 
 ---
 
 ## 👥 Characters
 
-Create a list of **at least 5 Lanterns** (from the comics, or originals who fit the Corps). For each character, specify:
-
-- Name
-- Home Sector
-- Strength
-- Weakness
-
-📝 Example (`characters.txt`), format only, write your own entries:
-
-```text
 Hal Jordan,Sector 2814,Fearless,Reckless
 John Stewart,Sector 2814,Disciplined,Haunted by Past Failures
 Jessica Cruz,Sector 2814,Resilient,Crippling Anxiety
@@ -70,15 +53,13 @@ A sample `game_data.json` will be provided with seven Oa-themed rooms and their 
 - **Void of Fear** (🧡 Trial)
 - **Central Power Battery Chamber** (final room)
 
-Each room entry in the JSON should define its name, description, exits (direction to room), and items. The Central Power Battery Chamber should start **locked**.
-
-**NOTE:** You don't need to invent the whole map. Build the logic and flavour of the trial rooms.
+Each room entry in the JSON defines its name, description, exits (direction to room), and items. The Central Power Battery Chamber should start **locked**.
 
 ---
 
 ## 🧠 Trial Design (Specs Only)
 
-Each trial is triggered when the player tries to `take` the lens in that room. A trial function should decide whether the lens is granted, denied, or already owned. These are the specs for each; the implementation is up to you.
+Each trial is triggered when the player tries to `take` the lens in that room. A trial function should decide whether the lens is granted, denied, or already owned. These are the specs for each.
 
 ### 💚 Will Forge: Test of Willpower
 
@@ -98,7 +79,6 @@ Each trial is triggered when the player tries to `take` the lens in that room. A
 - Include at least one choice that tempts the player to retreat.
 - Success requires pushing forward through a minimum number of steps without using `go` to leave.
 
-> All examples are guides. Riddles, choices and mechanics are yours to design.
 
 ---
 
@@ -106,15 +86,15 @@ Each trial is triggered when the player tries to `take` the lens in that room. A
 
 | Command | Description |
 |---|---|
-| `go [direction]` | Move the player in a direction. E.g. `go north` |
+| `move [direction]` | Move the player in a direction. E.g. `go north` |
 | `look` | Show the current room's description, exits and visible items |
 | `take [item]` | Pick up an item and add it to inventory (may trigger a trial) |
 | `use [item]` | Use an inventory item. E.g. `use ring` could recharge or light a path |
 | `inventory` | Show all items currently carried |
 | `charge` | Show the ring's current charge level |
 | `help` | List all commands with short descriptions |
-| `save_load.py` | Save the current game state to a file |
-| `load` | Load the previously saved game state |
+| `save_game.py` | Save the current game state to a file |
+| `load_game.py` | Load the previously saved game state |
 | `quit` / `exit` | Exit the game loop |
 
 ### 🧑‍💻 Example Input/Output (format only)
@@ -133,29 +113,6 @@ You added the spare battery to your inventory.
 You are carrying: spare battery
 ```
 
----
-
-## 🔄 Suggested Steps
-
-### Phase 1: World & Room Setup
-- Implement `Room` and `Commands` classes
-- Load rooms from `game_data.json`
-
-### Phase 2: Player Logic
-- Implement the `Player` class
-- Load a player from `characters.txt`
-
-### Phase 3: Core Game Engine
-- Build the command loop
-- Allow room-to-room movement
-
-### Phase 4: Save/Load
-- Save and restore location, inventory, ring charge, and unlocked rooms
-
-### Phase 5: Trials & Polish
-- Implement the three trial functions
-- Final room unlock logic
-- Different behavior based on character strengths and weaknesses
 
 ---
 
@@ -172,7 +129,7 @@ Tackle these once the basics work. They're ordered roughly by difficulty.
 
 ---
 
-## 🧪 Optional Extras
+## Extras
 
 - Write tests for all your classes
 - Store trial prompts in a JSON file and pick randomly
@@ -197,7 +154,7 @@ Once the player has all 3 lenses and enters the **Central Power Battery Chamber*
 
 - [ ] Game starts, runs, and exits cleanly
 - [ ] All commands in the guide work
-- [ ] 5+ characters load from `characters.txt`
+- [ ] 5+ characters load 
 - [ ] All three trials are playable, winnable, and retryable
 - [ ] Final room is locked until all lenses are collected
 - [ ] Save/load restores the full game state
@@ -206,8 +163,4 @@ Once the player has all 3 lenses and enters the **Central Power Battery Chamber*
 
 ---
 
-## 💚 Good Luck, Lanterns!
 
-All examples in this document are guides only. You have creative freedom over how commands, trials and output are structured. Work with your group, write clean code, tell a great story, and remember:
-
-*In brightest day, in blackest night, may your logic be as strong as your will.*
