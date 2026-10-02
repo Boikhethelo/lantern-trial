@@ -1,0 +1,37 @@
+{
+  "Guardian Citadel": {
+    "description": "The ancient seat of the Guardians, humming with green light.",
+    "exits": { "east": "Corps Armory" },
+    "items": []
+  },
+
+  "Corps Armory": {
+    "description": "Racks of dormant lantern batteries line the walls.",
+    "exits": { "west": "Guardian Citadel" },
+    "items": ["spare battery", "Guardian scroll"]
+  },
+
+  "Hall of Lanterns": {
+    "description" : "",
+    "exists" : {},
+    "items" : []
+  },
+
+  "Will Forge" : {
+    "description" : "",
+    "exists" : {},
+    "items" : []
+  },
+
+  "Void of Fear" : {
+    "description" : "",
+    "exists" : {},
+    "items" : []
+  },
+
+  "Central Power Battery Chamber" : {
+    "description" : "",
+    "exists" : {},
+    "items" : []
+  }
+}

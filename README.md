@@ -1,6 +1,6 @@
-# 💚 Lantern Trails
+# 💚 Lantern Trials
 
-Welcome to **Lantern Trails**, a text-based adventure game challenge where you'll use your Python skills to guide a rookie Green Lantern through the ancient halls of **Oa**, home of the Green Lantern Corps, in search of the lost power of the **Central Power Battery**.
+Welcome to **Lantern Trials**, a text-based adventure game challenge where you'll use your Python skills to guide a rookie Green Lantern through the ancient halls of **Oa**, home of the Green Lantern Corps, in search of the lost power of the **Central Power Battery**.
 
 ---
 
@@ -23,7 +23,7 @@ To win the game, players must:
 ## 🗂️ Project Structure
 
 ```text
-lantern_trails/
+lantern_trial/
 ├── game.py               # Main game loop
 ├── player.py             # Player class and character logic
 ├── room.py               # Room class

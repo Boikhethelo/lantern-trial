@@ -1,0 +1,2 @@
+Name, Home Sector, Strength, Weakness
+Hal Jordan,Sector 2814,Fearless,Reckless
