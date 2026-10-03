@@ -1,3 +1,5 @@
+from typing import Any
+
 
 class Player:
     def __init__(self , name:str, sector:str, strength:str, weakness:str):
@@ -25,7 +27,13 @@ class Player:
     def set_position(self, position: str):
         self._position = position
 
-    def get_items(self) -> str:
+    def set_items(self, items: list[str]):
+        self._items = items
+
+    def set_score(self, score: int):
+        self._score = score
+
+    def get_items(self) -> list[str]:
         return self._items
 
     def get_score(self) -> int:

@@ -7,3 +7,7 @@ def print_items(items):
 
 def start():
     print("Welcome")
+
+def view_items(items):
+    for item in items:
+        print(item)

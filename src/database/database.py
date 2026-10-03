@@ -5,6 +5,7 @@ class Database:
     def __init__(self, connection_string: str):
         self.connection_string = connection_string
 
+
     def connection(self):
 
         return sqlite3.connect(self.connection_string)
@@ -33,13 +34,13 @@ class Database:
                 self.connection().close()
 
 
-    def get_question(self, room: str, difficulty) -> dict:
+    def get_question(self, room: str, difficulty:int) -> dict:
 
 
         cursor = self.connection().cursor()
-        cursor.execute("SELECT * FROM questions WHERE room=? AND difficulty=? ORDER BY RANDOM() LIMIT 1",(room, difficulty))
+        cursor.execute("SELECT * FROM questions WHERE room=? AND difficulty=? ORDER BY RANDOM() LIMIT 1",(room, str(difficulty)))
         row = cursor.fetchone()
-        output = {"question" : row[0], "answer" : row[1], "hint" : row[2], "character" : row[3]}
+        output = {"id"  : int(row[0]) , "room" : row[1], "difficulty" : int(row[2]), "question" : row[3] , "answer" : row[4] , "hint" : row[5] , "character" : row[6]}
         self.connection().close()
 
         return output
