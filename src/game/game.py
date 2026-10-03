@@ -1,6 +1,6 @@
 from player.player_dao import PlayerDAO
 from question.question_dao import QuestionDAO
-from persistance import save_load as storage
+from persistence import save_load as storage
 from room.room_dao import RoomDAO
 from player.player import Player
 
@@ -14,7 +14,7 @@ class Game:
 
         self._player = player
         self._difficulty = difficulty_setting
-        
+
         self._room = self._room_loader.load_room("Guardian Citadel")
 
 

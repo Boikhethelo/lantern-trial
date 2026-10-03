@@ -12,36 +12,42 @@ class Database:
 
     def insert_question(self, room : str, difficulty : int, question : str, answer : str, hint: str, character: str):
 
-        cursor = self.connection().cursor()
-        cursor.execute("INSERT INTO questions (room,difficulty,question,answer,hint,character) VALUES (?,?,?,?,?,?,?) ",
+
+        conn = self.connection()
+
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO questions (room,difficulty,question,answer,hint,character) VALUES (?,?,?,?,?,?) ",
                        (room, difficulty, question, answer, hint, character))
-        self.connection().commit()
+        conn.commit()
         print("inserted successfully" + cursor.lastrowid)
-        self.connection().close()
+        conn.close()
 
     def read_schema(self):
         with open("/resources/schema.sql", "r" , encoding="utf-8") as file:
             schema = file.read()
-            cursor = self.connection().cursor()
+            conn = self.connection()
+            cursor = conn.cursor()
 
             try:
                 cursor.executescript(schema)
-                self.connection().commit()
+                conn.commit()
                 print("Database and schema successfully loaded")
             except sqlite3.Error as error:
                 print(error)
             finally:
-                self.connection().close()
+                conn.close()
 
 
     def get_question(self, room: str, difficulty:int) -> dict:
 
+        conn = self.connection()
 
-        cursor = self.connection().cursor()
+
+        cursor = conn.cursor()
         cursor.execute("SELECT * FROM questions WHERE room=? AND difficulty=? ORDER BY RANDOM() LIMIT 1",(room, str(difficulty)))
         row = cursor.fetchone()
         output = {"id"  : int(row[0]) , "room" : row[1], "difficulty" : int(row[2]), "question" : row[3] , "answer" : row[4] , "hint" : row[5] , "character" : row[6]}
-        self.connection().close()
+        conn.close()
 
         return output
 
