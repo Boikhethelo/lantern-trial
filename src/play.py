@@ -1,16 +1,19 @@
 import display.display
-from validation.command_validator import CommandValidator
+from validation.input_validator import InputValidator
 import validation.request_validator as validate
 from player.player_dao import PlayerDAO
 from room.room_dao import RoomDAO
 from game.game import Game
+from validation.request_validator import RequestValidator
+
 
 class Play:
     def __int__(self):
-        display.start()
-        self.command_validator = CommandValidator
+        self.input_validator = InputValidator()
+        self.validator = RequestValidator()
         self.player_loader = PlayerDAO()
-        self.room_loader =RoomDAO
+        self.room_loader =RoomDAO()
+
 
 
 
@@ -25,9 +28,11 @@ class Play:
 
     def _move_request(self, direction: str) -> bool:
 
-        if validate.validate_move(direction , self.game.get_room()):
+        if self.validator.validate_move(direction , self.game.get_room()):
             self.game.move_room(direction)
             print("Moved to " + self.game.get_room().get_name())
+        else:
+            print("Unable to move in that direction! ")
 
         return True
 
@@ -40,7 +45,7 @@ class Play:
         display.start()
 
         choice = int(input("Select a character : "))
-        character = validate.get_character(choice)
+        character = self.validator.get_character(choice)
 
 
         player = self.player_loader.get_character(character)
@@ -50,7 +55,7 @@ class Play:
 
         while(run):
             raw_command : str = input("What would you like to do next : ")
-            parsed_command = self.command_validator.validate_command(raw_command)
+            parsed_command = self.input_validator.validate_command(raw_command)
 
             if len(parsed_command)  > 0:
                 run = self._route(parsed_command)

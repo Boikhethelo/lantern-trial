@@ -1,6 +1,6 @@
 from room import room
 from room.room_dao import RoomDAO
-from validation.command_validator import CommandValidator
+from validation.input_validator import InputValidator
 from player.player import Player
 from room.room import Room
 import display
@@ -13,6 +13,7 @@ class Game:
 
         self.player = player
         self.room = self.room_loader.load_room("Guardian Citadel")
+
 
 
     def move_room(self, direction:str):
