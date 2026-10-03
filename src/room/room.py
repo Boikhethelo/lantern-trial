@@ -1,5 +1,5 @@
 class Room:
-    def __init__(self, name : str , description : str , exits : dict , items : list, status : bool):
+    def __init__(self, name : str , description : str , exits : dict[str,str] , items : list, status : bool):
         self._name = name
         self._description = description
         self._exits = exits
@@ -12,7 +12,7 @@ class Room:
     def get_description(self) -> str:
         return self._description
 
-    def get_exits (self) -> dict:
+    def get_exits (self) -> dict[str,str]:
         return self._exits
 
     def get_items(self) -> list:

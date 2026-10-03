@@ -1,3 +1,4 @@
+from room import room
 from room.room_dao import RoomDAO
 from validation.command_validator import CommandValidator
 from player.player import Player
@@ -5,22 +6,30 @@ from room.room import Room
 import display
 
 
+
 class Game:
-    def __init__(self, player:Player, room:Room):
-        self.validator = CommandValidator
+    def __init__(self, player:Player):
+        self.room_loader = RoomDAO()
+
         self.player = player
-        self.room = room
-        self.room_loader = RoomDAO
+        self.room = self.room_loader.load_room("Guardian Citadel")
+
 
     def move_room(self, direction:str):
-        """TODO"""
+
+        exits : dict[str,str] = self.get_room().get_exits()
+
+        next_room : str = exits.get(direction)
+        self.room = self.room_loader.load_room(next_room)
+
 
 
     def view_items_in_room(self):
         return self.room.get_items()
 
-    def get_rooms_description(self):
-        return self.room.get_description()
+
+    def get_room(self):
+        return self.room
 
     def view_player_items(self):
         return self.player.get_items()

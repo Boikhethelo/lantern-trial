@@ -5,7 +5,8 @@ class CommandValidator:
         self.command = []
 
 
-    def validate_command(self, command: str) -> str :
+
+    def validate_command(self, command: str) -> list[str] :
 
         command_list = command.split()
         self._clean(command_list)
@@ -13,11 +14,11 @@ class CommandValidator:
         if self._validate(self.command):
 
             if len(self.command) is 1:
-                return self.command[0]
+                return self.command
             else:
-                return self.command[1]
+                return self.command
         else:
-            return "Invalid Command!"
+            return []
 
     def _clean(self,command_list: list[str]):
         for word in command_list:
@@ -33,9 +34,7 @@ class CommandValidator:
 
         return True
 
-    def validate_character(self, character: str) -> bool:
-        """TODO"""
-        return True
+
 
 
 

@@ -3,15 +3,18 @@ import json
 from room.room import Room
 
 class RoomDAO:
-    def __init__(self, name:str):
-        self._name = name
+    def __init__(self):
+        self._location = "/resources/game_data.json"
+        self._data = self._load_data()
 
-    def load_room(self) -> Room:
-        with open("/resources/game_data.json") as game_data:
-            data = json.load(game_data)
+    def _load_data(self):
+        with open(self._location, "r" , encoding='utf-8') as game_data:
+            return json.load(game_data)
 
-        chosen_room = data[self._name]
-        name = self._name
+    def load_room(self, name:str) -> Room:
+
+        chosen_room = self._data[name]
+        name = name
         description = chosen_room.get("description")
         exits = chosen_room.get("exits")
         items = chosen_room.get("items")

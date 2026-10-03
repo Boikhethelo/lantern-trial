@@ -4,7 +4,7 @@ Welcome to **Lantern Trials**, a text-based adventure game challenge where you'l
 
 ---
 
-## 📖 Game Overview
+## 📖 GameState Overview
 
 The Guardians of the Universe have sealed the Central Power Battery behind three trials of the **Emotional Spectrum**. Your Lantern's ring is nearly out of charge, and the only way to recharge it is to prove yourself worthy.
 
@@ -152,7 +152,7 @@ Once the player has all 3 lenses and enters the **Central Power Battery Chamber*
 
 ## 🧰 Evaluation Checklist
 
-- [ ] Game starts, runs, and exits cleanly
+- [ ] GameState starts, runs, and exits cleanly
 - [ ] All commands in the guide work
 - [ ] 5+ characters load 
 - [ ] All three trials are playable, winnable, and retryable
