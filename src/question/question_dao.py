@@ -3,7 +3,7 @@ from question.question import Question
 
 
 class QuestionDAO:
-    def __int__(self):
+    def __init__(self):
         self.sql_database = Database("questions.db")
 
     def load_question(self, room_name:str , difficulty: int) -> Question:

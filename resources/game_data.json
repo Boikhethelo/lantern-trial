@@ -21,13 +21,15 @@
       "south" : "Garden of Mogo",
       "east" : "Void of Fear"
     },
-    "items" : ["lantern oath tablet"]
+    "items" : ["lantern oath tablet"],
+    "locked" : false
   },
 
   "Will Forge" : {
     "description" : "Molten green energy pours through channels in the floor. The air presses against your ring, daring you to falter.",
     "exits" : {"south": "Hall of Lanterns" },
-    "items" : ["Lens of Will"]
+    "items" : ["Lens of Will"],
+    "locked" : true
   },
 
   "Garden of Mogo": {

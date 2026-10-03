@@ -14,6 +14,7 @@ class Game:
 
         self._player = player
         self._difficulty = difficulty_setting
+        
         self._room = self._room_loader.load_room("Guardian Citadel")
 
 
@@ -23,14 +24,14 @@ class Game:
 
         next_room : str = exits.get(direction)
         room = self._room_loader.load_room(next_room)
-        if room.get_status():
+        if not room.get_status():
             self._room = room
         else:
             return "locked"
 
     def view(self):
-        display.view_room(self.room.get_name() , self.get_room().get_description())
-        display.view_items(self.room.get_items())
+        display.view_room(self._room.get_name() , self.get_room().get_description())
+        display.view_items(self._room.get_items())
 
     def load_trial(self):
         self._question = self._question_loader.load_question(self._room.get_name(), self._difficulty)

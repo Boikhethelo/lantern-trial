@@ -4,7 +4,7 @@ from room.room import Room
 
 class RoomDAO:
     def __init__(self):
-        self._location = "/resources/game_data.json"
+        self._location = "resources/game_data.json"
         self._data = self._load_data()
 
     def _load_data(self):

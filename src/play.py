@@ -7,7 +7,7 @@ from validation.request_validator import RequestValidator
 
 class Play:
 
-    def __int__(self):
+    def __init__(self):
         self.input_validator = InputValidator()
         self.validator = RequestValidator()
         self.player_loader = PlayerDAO()

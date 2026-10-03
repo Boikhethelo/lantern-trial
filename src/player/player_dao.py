@@ -5,7 +5,7 @@ from player.player import Player
 
 class PlayerDAO:
     def __init__(self):
-        self._location = "/resources/character.json"
+        self._location = "resources/character.json"
         self._data = self._load_data()
 
 
