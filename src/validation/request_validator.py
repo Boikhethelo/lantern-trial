@@ -6,10 +6,25 @@ class RequestValidator:
         self.trial_items = ["lens of hope" , "lens of will" , "lens of resolve"]
 
     def get_character(self,choice: int) -> str:
+        if choice == "":
+            return "Hal Jordan"
         match choice:
             case 1 : return "Hal Jordan"
+            case 2 : return "John Stewart"
+            case 3 : return "Jessica Cruz"
+            case 4 : return "Kilowog"
+
 
         return "Hal Jordan"
+
+    def inventory_check(self, items:list[str], requested : str):
+        parsed_items = [item.strip().lower() for item in items]
+
+        for item in parsed_items:
+            if requested == item:
+                return True
+        return False
+
 
 
     def validate_move(self,direction: str , room: Room):
@@ -20,7 +35,9 @@ class RequestValidator:
             return False
 
     def check_item(self, item: str , room: Room):
-        if item.strip().lower() in self.trial_items:
+        room_items = [item.strip().lower() for item in room.get_items()]
+
+        if item.strip().lower() in room_items:
             if item.strip().lower() in room.get_items():
                 return True
             else:
@@ -43,7 +60,7 @@ class RequestValidator:
 
     def will_forge_requirements(self,items):
 
-        required = "lens of will"
+        required = "lens of hope"
         for item in items:
             if item == required:
                 return True

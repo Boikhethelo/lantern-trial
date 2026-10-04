@@ -37,9 +37,9 @@ class Game:
 
         next_room : str = exits.get(direction)
 
-        room = self._room_data.get(next_room)
-        if not room.get_status():
-            self._room = self._load_room(room)
+
+        if not self._room_data[next_room].get("locked"):
+            self._room = self._load_room(next_room)
             self._player.set_position(self._room.get_name())
             return "Moved to " + self._room.get_name()
 
@@ -77,7 +77,7 @@ class Game:
 
 
     def unlock_room(self, room):
-            self._room_data[room]["locked"] = True
+            self._room_data[room]["locked"] = False
 
 
     def save(self):

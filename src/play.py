@@ -40,6 +40,9 @@ class Play:
 
     def _take_request(self, chosen_item):
 
+        if self.validator.inventory_check(self.game.get_player().get_items(), chosen_item):
+            print("you already have " + chosen_item)
+            return
 
 
         if self.validator.check_item(chosen_item, self.game.get_room()):
@@ -50,13 +53,19 @@ class Play:
                 display.view_question(question)
                 answer = input("Enter your answer: ")
 
+
                 if self._check_answer(answer):
                     self.game.get_player().add_item(chosen_item)
                     trial = False
+
+                elif answer == "leave" :
+                    trial = False
                 else:
                     pass
+
         elif chosen_item in self.game.get_room().get_items():
             self.game.get_player().add_item(chosen_item)
+
 
         if self.validator.central_power_battery_chamber_requirements(self.game.get_player().get_items()):
             self.game.unlock_room("Central Power Battery Chamber")
@@ -65,9 +74,6 @@ class Play:
             self.game.unlock_room("Will Forge")
 
 
-
-        else:
-            self.game.get_player().add_item(chosen_item)
 
     def _check_answer(self,answer):
         if answer == self.game.get_answer():
