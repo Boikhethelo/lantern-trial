@@ -52,7 +52,7 @@ class Game:
         display.view_items(self._room.get_items())
 
     def load_trial(self):
-        self._question = self._question_loader.load_question(self._room.get_name(), self._difficulty)
+        self._question = self._question_loader.load_question(self._room.get_name(), self._difficulty, self._player.get_name())
 
 
     def get_question(self):

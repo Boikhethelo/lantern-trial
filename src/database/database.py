@@ -37,18 +37,25 @@ class Database:
                 conn.close()
 
 
-    def get_question(self, room: str, difficulty:int) -> dict:
-
+    def get_question(self, room: str, difficulty: int, character: str) -> dict :
         conn = self.connection()
+        conn.row_factory = sqlite3.Row
+        try:
+            row = conn.execute(
+                """
+                SELECT id, room, difficulty, question, answer,
+                       CASE WHEN character IS NULL OR character = ? THEN hint END AS hint
+                FROM questions
+                WHERE room = ?
+                ORDER BY ABS(difficulty - ?), RANDOM()
+                LIMIT 1
+                """,
+                (character, room, difficulty),
+            ).fetchone()
+        finally:
+            conn.close()
 
-
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM questions WHERE room=? AND difficulty=? ORDER BY RANDOM() LIMIT 1",(room, str(difficulty)))
-        row = cursor.fetchone()
-        output = {"id"  : int(row[0]) , "room" : row[1], "difficulty" : int(row[2]), "question" : row[3] , "answer" : row[4] , "hint" : row[5] , "character" : row[6]}
-        conn.close()
-
-        return output
+        return dict(row)
 
 
 
