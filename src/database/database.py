@@ -19,11 +19,10 @@ class Database:
         cursor.execute("INSERT INTO questions (room,difficulty,question,answer,hint,character) VALUES (?,?,?,?,?,?) ",
                        (room, difficulty, question, answer, hint, character))
         conn.commit()
-        print("inserted successfully" + cursor.lastrowid)
         conn.close()
 
     def read_schema(self):
-        with open("/resources/schema.sql", "r" , encoding="utf-8") as file:
+        with open("resources/schema.sql", "r" , encoding="utf-8") as file:
             schema = file.read()
             conn = self.connection()
             cursor = conn.cursor()

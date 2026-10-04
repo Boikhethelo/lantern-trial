@@ -4,7 +4,7 @@ class RequestValidator:
 
     def __init__(self):
         self.answer = ''
-        self.trial_items = ["Lens of Hope" , "Lens of Will" , "Void of Fear"]
+        self.trial_items = ["lens of hope" , "lens of will" , "void of fear"]
 
     def get_character(self,choice: int) -> str:
         match choice:
@@ -21,8 +21,8 @@ class RequestValidator:
         else:
             return False
 
-    def check_item(self, item):
-        if item in self.trial_items:
+    def check_item(self, item: str):
+        if item.strip().lower() in self.trial_items:
             return True
         else:
             return False

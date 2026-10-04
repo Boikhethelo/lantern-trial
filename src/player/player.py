@@ -40,7 +40,7 @@ class Player:
         return self._score
 
     def add_item(self, item : str):
-        self._items += item
+        self._items.append(item)
 
     def add_score(self, score: int):
         self._score += score

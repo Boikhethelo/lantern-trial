@@ -1,4 +1,4 @@
-import display.display
+import display.display as display
 from validation.input_validator import InputValidator
 from player.player_dao import PlayerDAO
 from game.game import Game
@@ -18,9 +18,10 @@ class Play:
         match commands[0]:
             case "go": self._move_request(commands[1])
             case "look" : self.game.view()
-            case "take" : self._take_request(commands[1])
+            case "take" : self._take_request(" ".join(commands[1:]))
             case "use"  : print("""TODO""")
             case "charge" : print("""TODO""")
+            case "inventory" : display.view_items(self.game.get_player().get_items())
             case "help"  : display.show_help()
             case "save"  : self.game.save()
             case "load" : self.game.load()
@@ -82,13 +83,13 @@ class Play:
 
             if raw_command in ["exit" , "quit"]:
                 run = False
-
-            parsed_command = self.input_validator.validate_command(raw_command)
-
-            if len(parsed_command)  > 0:
-                run = self._route(parsed_command)
             else:
-                print("Invalid command")
+                parsed_command = self.input_validator.validate_command(raw_command)
+
+                if len(parsed_command)  > 0:
+                    run = self._route(parsed_command)
+                else:
+                    print("Invalid command")
 
 if __name__ == "__main__":
     play = Play()

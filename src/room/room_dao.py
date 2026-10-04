@@ -5,21 +5,21 @@ from room.room import Room
 class RoomDAO:
     def __init__(self):
         self._location = "resources/game_data.json"
-        self._data = self._load_data()
 
-    def _load_data(self):
+
+    def load_data(self):
         with open(self._location, "r" , encoding='utf-8') as game_data:
             return json.load(game_data)
 
-    def load_room(self, name:str) -> Room:
-
-        chosen_room = self._data[name]
-        name = name
-        description = chosen_room.get("description")
-        exits = chosen_room.get("exits")
-        items = chosen_room.get("items")
-        status = chosen_room.get("locked")
-
-        return Room(name, description, exits, items, status )
+    # def load_room(self, name:str) -> Room:
+    #
+    #     chosen_room = self._data[name]
+    #     name = name
+    #     description = chosen_room.get("description")
+    #     exits = chosen_room.get("exits")
+    #     items = chosen_room.get("items")
+    #     status = chosen_room.get("locked")
+    #
+    #     return Room(name, description, exits, items, status )
 
 

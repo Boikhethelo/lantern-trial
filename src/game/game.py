@@ -1,6 +1,7 @@
 from player.player_dao import PlayerDAO
 from question.question_dao import QuestionDAO
 from persistence import save_load as storage
+from room.room import Room
 from room.room_dao import RoomDAO
 from player.player import Player
 
@@ -9,25 +10,42 @@ import display.display as display
 class Game:
     def __init__(self, player:Player , difficulty_setting):
         self._question = None
-        self._room_loader = RoomDAO()
+        self._room_data = RoomDAO().load_data()
         self._question_loader = QuestionDAO()
 
         self._player = player
         self._difficulty = difficulty_setting
 
-        self._room = self._room_loader.load_room("Guardian Citadel")
+        self._room = self._room_data.get("Guardian Citadel")
+
+    def _load_room(self, name:str) -> Room:
+
+        chosen_room = self._room_data.get(name)
+        name = name
+        description = chosen_room.get("description")
+        exits = chosen_room.get("exits")
+        items = chosen_room.get("items")
+        status = chosen_room.get("locked")
+
+        return Room(name, description, exits, items, status )
 
 
     def move_room(self, direction:str):
 
+
         exits : dict[str,str] = self.get_room().get_exits()
 
         next_room : str = exits.get(direction)
-        room = self._room_loader.load_room(next_room)
+
+        if next_room == "Central Power Battery Chamber":
+            self.unlock_room()
+
+
+        room = self._room_data.get(next_room)
         if not room.get_status():
             self._room = room
-        else:
-            return "locked"
+            self._player.set_position(self._room.get_name())
+
 
     def view(self):
         display.view_room(self._room.get_name() , self.get_room().get_description())
@@ -35,6 +53,7 @@ class Game:
 
     def load_trial(self):
         self._question = self._question_loader.load_question(self._room.get_name(), self._difficulty)
+
 
     def get_question(self):
         return self._question.get_question()
@@ -44,17 +63,34 @@ class Game:
 
 
     def view_items_in_room(self):
-        return self.room.get_items()
+        return self._room.get_items()
 
 
     def get_room(self):
-        return self.room
+        return self._room
 
     def get_player(self):
         return self._player
 
     def view_player_items(self):
         return self._player.get_items()
+
+    def _check_items(self):
+        items = ["lens of will" , "lens of hope" , "lens of resolve" ]
+
+        if items in self._player.get_items():
+            return True
+        else:
+            return False
+
+
+
+    def unlock_room(self):
+        if self._check_items:
+            self._room_data["Central Power Battery Chamber"]["status"] = True
+
+
+
 
     def save(self):
         storage.save_game(self._player.get_name(), self._player.get_score() , self._difficulty , self._player.get_items() , self._room.get_name())
@@ -68,12 +104,11 @@ class Game:
         items = load_data.get("items")
 
         self._player = PlayerDAO().get_character(character)
-        self._room = self._room_loader.load_room(room)
+        self._room = self._room_data._load_room(room)
 
         self._player.set_position(room)
         self._player.set_score(score)
         self._player.set_items(items)
         self._difficulty = difficulty
 
-    def exit(self):
-        return False
+

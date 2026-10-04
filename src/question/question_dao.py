@@ -4,7 +4,7 @@ from question.question import Question
 
 class QuestionDAO:
     def __init__(self):
-        self.sql_database = Database("questions.db")
+        self.sql_database = Database("resources/questions.db")
 
     def load_question(self, room_name:str , difficulty: int) -> Question:
         question_data = self.sql_database.get_question(room_name,difficulty)

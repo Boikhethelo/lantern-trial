@@ -1,13 +1,20 @@
-def print_help():
-    print("help")
+def view_help():
+    """TODO"""
 
-
-def print_items(items):
-    print(items)
 
 def start():
-    print("Welcome")
+    """TODO"""
 
 def view_items(items):
-    for item in items:
-        print(item)
+    # for item in items:
+    #     print(item)
+
+    """TODO"""
+
+def view_room(room , description):
+    """TODO"""
+
+def view_question(question):
+    """TODO"""
+
+

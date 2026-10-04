@@ -7,6 +7,8 @@ class InputValidator:
 
 
     def validate_command(self, command: str) -> list[str] :
+        if command == "":
+            return []
         command_list = command.split()
         cleaned = [word.strip().lower() for word in command_list]
 
