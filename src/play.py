@@ -62,8 +62,9 @@ class Play:
                     trial = False
                 else:
                     pass
+        
 
-        elif chosen_item in self.game.get_room().get_items():
+        elif self.validator.check_item(chosen_item, self.game.get_room().get_items()):
             self.game.get_player().add_item(chosen_item)
 
 

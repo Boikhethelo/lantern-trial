@@ -18,6 +18,7 @@ class RequestValidator:
         return "Hal Jordan"
 
     def inventory_check(self, items:list[str], requested : str):
+
         parsed_items = [item.strip().lower() for item in items]
 
         for item in parsed_items:
@@ -37,14 +38,15 @@ class RequestValidator:
     def check_item(self, item: str , room: Room):
         room_items = [item.strip().lower() for item in room.get_items()]
 
-        if item.strip().lower() in room_items:
-            if item.strip().lower() in room.get_items():
-                return True
-            else:
-                return False
+        if item.strip().lower() in room_items and item in self.trial_items:
+            return True
 
+
+        elif item.strip().lower() in room_items:
+            return True
         else:
             return False
+
 
     def central_power_battery_chamber_requirements(self,items):
 
