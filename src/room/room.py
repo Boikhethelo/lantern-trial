@@ -18,9 +18,14 @@ class Room:
     def get_items(self) -> list:
         return self._items
 
+    def remove_item(self, item):
+        self._items.remove(item)
+
     def get_status(self) -> bool:
         return self._status
 
     def set_status(self, status: bool):
         self._status = status
+
+
 

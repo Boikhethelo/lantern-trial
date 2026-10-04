@@ -45,7 +45,7 @@ class Play:
             return
 
 
-        if self.validator.check_item(chosen_item, self.game.get_room()):
+        if self.validator.is_trial_item(chosen_item, self.game.get_room()):
             self.game.load_trial()
             question = self.game.get_question()
             trial = True
@@ -56,15 +56,16 @@ class Play:
 
                 if self._check_answer(answer):
                     self.game.get_player().add_item(chosen_item)
+                    self.game.get_room().remove_item(chosen_item)
                     trial = False
 
                 elif answer == "leave" :
                     trial = False
                 else:
                     pass
-        
 
-        elif self.validator.check_item(chosen_item, self.game.get_room().get_items()):
+
+        elif self.validator.check_item(chosen_item, self.game.get_room()):
             self.game.get_player().add_item(chosen_item)
 
 

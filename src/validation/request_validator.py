@@ -35,14 +35,17 @@ class RequestValidator:
         else:
             return False
 
-    def check_item(self, item: str , room: Room):
+    def is_trial_item(self, item:str, room: Room):
         room_items = [item.strip().lower() for item in room.get_items()]
-
         if item.strip().lower() in room_items and item in self.trial_items:
             return True
+        else:
+            return False
 
 
-        elif item.strip().lower() in room_items:
+    def check_item(self, item: str , room: Room):
+        room_items = [item.strip().lower() for item in room.get_items()]
+        if item.strip().lower() in room_items:
             return True
         else:
             return False
