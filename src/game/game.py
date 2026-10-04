@@ -16,7 +16,7 @@ class Game:
         self._player = player
         self._difficulty = difficulty_setting
 
-        self._room = self._room_data.get("Guardian Citadel")
+        self._room = self._load_room("Guardian Citadel")
 
     def _load_room(self, name:str) -> Room:
 
@@ -37,14 +37,14 @@ class Game:
 
         next_room : str = exits.get(direction)
 
-        if next_room == "Central Power Battery Chamber":
-            self.unlock_room()
-
-
         room = self._room_data.get(next_room)
         if not room.get_status():
-            self._room = room
+            self._room = self._load_room(room)
             self._player.set_position(self._room.get_name())
+            return "Moved to " + self._room.get_name()
+
+        else:
+            return "Locked! "
 
 
     def view(self):
@@ -75,21 +75,9 @@ class Game:
     def view_player_items(self):
         return self._player.get_items()
 
-    def _check_items(self):
-        items = ["lens of will" , "lens of hope" , "lens of resolve" ]
 
-        if items in self._player.get_items():
-            return True
-        else:
-            return False
-
-
-
-    def unlock_room(self):
-        if self._check_items:
-            self._room_data["Central Power Battery Chamber"]["status"] = True
-
-
+    def unlock_room(self, room):
+            self._room_data[room]["locked"] = True
 
 
     def save(self):
@@ -104,7 +92,7 @@ class Game:
         items = load_data.get("items")
 
         self._player = PlayerDAO().get_character(character)
-        self._room = self._room_data._load_room(room)
+        self._room = self._load_room(room)
 
         self._player.set_position(room)
         self._player.set_score(score)

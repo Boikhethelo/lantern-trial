@@ -17,4 +17,7 @@ def view_room(room , description):
 def view_question(question):
     """TODO"""
 
+def view_move(result):
+    print(result)
+
 

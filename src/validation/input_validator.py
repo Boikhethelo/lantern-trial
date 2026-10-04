@@ -21,9 +21,14 @@ class InputValidator:
         if command[0] not in self._valid_commands:
             return False
 
+        if len(command) == 1 and command in ["go" , "move"]:
+            print("needs a direction")
+            return False
+
         if len(command) > 1 and command[0] in ["go" , "move"]:
             if command[1] not in self._valid_directions:
                 return False
+
 
         return True
 

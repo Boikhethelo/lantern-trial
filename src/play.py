@@ -22,7 +22,7 @@ class Play:
             case "use"  : print("""TODO""")
             case "charge" : print("""TODO""")
             case "inventory" : display.view_items(self.game.get_player().get_items())
-            case "help"  : display.show_help()
+            case "help"  : display.view_help()
             case "save"  : self.game.save()
             case "load" : self.game.load()
 
@@ -32,14 +32,17 @@ class Play:
     def _move_request(self, direction: str):
 
         if self.validator.validate_move(direction , self.game.get_room()):
-            self.game.move_room(direction)
-            print("Moved to " + self.game.get_room().get_name())
+            display.view_move(self.game.move_room(direction))
         else:
-            print("Unable to move in that direction! ")
+            print("Nothing in that direction ")
+
+
 
     def _take_request(self, chosen_item):
 
-        if self.validator.check_item(chosen_item):
+
+
+        if self.validator.check_item(chosen_item, self.game.get_room()):
             self.game.load_trial()
             question = self.game.get_question()
             trial = True
@@ -52,6 +55,16 @@ class Play:
                     trial = False
                 else:
                     pass
+        elif chosen_item in self.game.get_room().get_items():
+            self.game.get_player().add_item(chosen_item)
+
+        if self.validator.central_power_battery_chamber_requirements(self.game.get_player().get_items()):
+            self.game.unlock_room("Central Power Battery Chamber")
+
+        if self.validator.will_forge_requirements(self.game.get_player().get_items()):
+            self.game.unlock_room("Will Forge")
+
+
 
         else:
             self.game.get_player().add_item(chosen_item)
