@@ -17,13 +17,13 @@ class Game:
         self._player = player
         self._difficulty = difficulty_setting
 
-        self._room = self._load_room("Guardian Citadel")
+        self._room = self._rooms["Guardian Citadel"]
 
     def _load_all_rooms(self) -> dict[str,Room]:
         output = {}
 
-        for room_dict in self._room_data:
-            current = self._load_room(room_dict.key())
+        for room_name in self._room_data:
+            current = self._load_room(room_name)
             output.update({current.get_name() : current})
 
         return output
@@ -95,7 +95,7 @@ class Game:
 
 
     def unlock_room(self, room):
-            self._room_data[room]["locked"] = False
+            self._rooms[room.get_name()].set_status(False)
 
 
     def save(self):
