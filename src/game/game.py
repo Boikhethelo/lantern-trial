@@ -94,8 +94,8 @@ class Game:
         return self._player.get_items()
 
 
-    def unlock_room(self, room):
-            self._rooms[room.get_name()].set_status(False)
+    def unlock_room(self, room:str):
+            self._rooms[room].set_status(False)
 
 
     def save(self):
