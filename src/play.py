@@ -46,27 +46,35 @@ class Play:
 
 
         if self.validator.is_trial_item(chosen_item, self.game.get_room()):
-            self.game.load_trial()
-            question = self.game.get_question()
-            trial = True
-            while trial:
-                display.view_question(question)
-                answer = input("Enter your answer: ")
+
+            if self.game.load_trial():
+                question = self.game.get_question()
+
+                trial = True
+                while trial:
+                    display.view_question(question)
+                    answer = input("Enter your answer: ")
+                    cleaned_answer = answer.lower().strip()
 
 
-                if self._check_answer(answer):
-                    self.game.get_player().add_item(chosen_item)
-                    self.game.get_room().remove_item(chosen_item)
-                    trial = False
+                    if self._check_answer(cleaned_answer):
+                        self.game.get_player().add_item(chosen_item)
+                        self.game.get_room().remove_item(chosen_item)
+                        trial = False
 
-                elif answer == "leave" :
-                    trial = False
-                else:
-                    pass
+                    elif answer == "leave" :
+                        trial = False
+                    else:
+                        pass
+            else:
+                print("Unable to load trial question you have been gifted " + chosen_item)
+                self.game.get_player().add_item(chosen_item)
+                self.game.get_room().remove_item(chosen_item)
 
 
         elif self.validator.check_item(chosen_item, self.game.get_room()):
             self.game.get_player().add_item(chosen_item)
+            self.game.get_room().remove_item(chosen_item)
 
 
         if self.validator.central_power_battery_chamber_requirements(self.game.get_player().get_items()):
@@ -78,7 +86,7 @@ class Play:
 
 
     def _check_answer(self,answer):
-        if answer == self.game.get_answer():
+        if answer.lower().strip() == self.game.get_answer().lower().strip():
             return True
         else:
             return False

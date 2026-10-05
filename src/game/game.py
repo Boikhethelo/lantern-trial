@@ -51,8 +51,13 @@ class Game:
         display.view_room(self._room.get_name() , self.get_room().get_description())
         display.view_items(self._room.get_items())
 
-    def load_trial(self):
+    def load_trial(self) -> bool:
+
         self._question = self._question_loader.load_question(self._room.get_name(), self._difficulty, self._player.get_name())
+        if self._question:
+            return True
+        else:
+            return False
 
 
     def get_question(self):

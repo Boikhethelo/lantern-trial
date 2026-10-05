@@ -6,8 +6,11 @@ class QuestionDAO:
     def __init__(self):
         self.sql_database = Database("resources/questions.db")
 
-    def load_question(self, room_name:str , difficulty: int , character:str) -> Question:
+    def load_question(self, room_name:str , difficulty: int , character:str) -> Question | None:
+
         question_data = self.sql_database.get_question(room_name,difficulty, character)
+        if not question_data:
+            return None
 
         q_id = question_data.get("id")
         question = question_data.get("question")

@@ -3,7 +3,7 @@ class Room:
         self._name = name
         self._description = description
         self._exits = exits
-        self._items = items
+        self._items = self._item_loader(items)
         self._status = status
 
     def get_name(self) -> str:
@@ -26,6 +26,10 @@ class Room:
 
     def set_status(self, status: bool):
         self._status = status
+
+    def _item_loader(self, items : list[str]) -> list[str]:
+        return [item.strip().lower() for item in items]
+
 
 
 

@@ -37,7 +37,7 @@ class Database:
                 conn.close()
 
 
-    def get_question(self, room: str, difficulty: int, character: str) -> dict :
+    def get_question(self, room: str, difficulty: int, character: str) -> dict | None:
         conn = self.connection()
         conn.row_factory = sqlite3.Row
         try:
@@ -55,7 +55,12 @@ class Database:
         finally:
             conn.close()
 
-        return dict(row)
+        if row:
+            return dict(row)
+        else:
+            return None
+
+
 
 
 
