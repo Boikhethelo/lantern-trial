@@ -11,12 +11,24 @@ class Game:
     def __init__(self, player:Player , difficulty_setting):
         self._question = None
         self._room_data = RoomDAO().load_data()
+        self._rooms = self._load_all_rooms()
         self._question_loader = QuestionDAO()
 
         self._player = player
         self._difficulty = difficulty_setting
 
         self._room = self._load_room("Guardian Citadel")
+
+    def _load_all_rooms(self) -> dict[str,Room]:
+        output = {}
+
+        for room_dict in self._room_data:
+            current = self._load_room(room_dict.key())
+            output.update({current.get_name() : current})
+
+        return output
+
+
 
     def _load_room(self, name:str) -> Room:
 
@@ -32,14 +44,15 @@ class Game:
 
     def move_room(self, direction:str):
 
-
         exits : dict[str,str] = self.get_room().get_exits()
 
-        next_room : str = exits.get(direction)
+        name : str | None = exits.get(direction)
+
+        next_room = self._rooms.get(name)
 
 
-        if not self._room_data[next_room].get("locked"):
-            self._room = self._load_room(next_room)
+        if not next_room.get_status():
+            self._room = next_room
             self._player.set_position(self._room.get_name())
             return "Moved to " + self._room.get_name()
 

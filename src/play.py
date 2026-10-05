@@ -62,7 +62,7 @@ class Play:
                         self.game.get_room().remove_item(chosen_item)
                         trial = False
 
-                    elif answer == "leave" :
+                    elif answer.lower().strip() == "leave" :
                         trial = False
                     else:
                         pass
