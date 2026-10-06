@@ -1,6 +1,4 @@
-from player.player_dao import PlayerDAO
 from question.question_dao import QuestionDAO
-from persistence import save_load as storage
 from room.room import Room
 from room.room_dao import RoomDAO
 from player.player import Player
@@ -95,10 +93,13 @@ class Game:
         return self._rooms
 
     def set_room(self, room_name:str):
-        self._room = self.load_room(room_name)
+        self._room = self._rooms[room_name]
 
     def get_player(self):
         return self._player
+
+    def get_difficulty(self):
+        return self._difficulty
 
     def view_player_items(self):
         return self._player.get_items()
@@ -108,23 +109,5 @@ class Game:
             self._rooms[room].set_status(False)
 
 
-    def save(self):
-        storage.save_game(self)
-
-    # def load(self):
-    #     load_data = storage.load_game()
-    #     character = load_data.get("character")
-    #     room = load_data.get("room")
-    #     score = int(load_data.get("score"))
-    #     difficulty = int(load_data.get("difficulty"))
-    #     items = load_data.get("items")
-    #
-    #     self._player = PlayerDAO().get_character(character)
-    #     self._room = self._load_room(room)
-    #
-    #     self._player.set_position(room)
-    #     self._player.set_score(score)
-    #     self._player.set_items(items)
-    #     self._difficulty = difficulty
 
 

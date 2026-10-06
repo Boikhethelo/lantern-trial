@@ -24,7 +24,7 @@ class Play:
             case "charge" : print("""TODO""")
             case "inventory" : display.view_items(self.game.get_player().get_items())
             case "help"  : display.view_help()
-            case "save"  : self.game.save()
+            case "save"  : self._save()
             case "load" : self._load_game()
 
         return True
@@ -135,7 +135,7 @@ class Play:
             new_game = Game(player, difficulty)
             new_game.load_all_rooms()
             new_game.set_room("Guardian Citadel")
-            return Game(player, difficulty)
+            return new_game
 
 
 

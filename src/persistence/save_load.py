@@ -11,7 +11,7 @@ def save_game(game: Game):
     data = {
         "character": game.get_player().get_name(),
         "score": game.get_player().get_score(),
-        "difficulty": game.get_player().get_difficulty(),
+        "difficulty": game.get_difficulty(),
         "items": game.get_player().get_items(),
         "position": game.get_room().get_name(),
         "rooms" : game.get_room().get_rooms(),
