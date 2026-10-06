@@ -14,7 +14,7 @@ def save_game(game: Game):
         "difficulty": game.get_difficulty(),
         "items": game.get_player().get_items(),
         "position": game.get_room().get_name(),
-        "rooms" : game.get_room().get_rooms(),
+        "rooms" : game.get_all_rooms(),
     }
 
     SAVE_PATH.parent.mkdir(parents=True, exist_ok=True)

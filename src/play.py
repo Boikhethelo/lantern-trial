@@ -112,7 +112,7 @@ class Play:
         room_dic = {}
 
         for room in rooms:
-            room_obj = loaded_game.load_room(room)
+            room_obj = loaded_game.load_room(room , rooms[room])
             room_dic.update({room: room_obj})
 
         loaded_game.set_all_rooms(room_dic)

@@ -8,40 +8,34 @@ import display.display as display
 class Game:
     def __init__(self, player:Player , difficulty_setting):
         self._question = None
-        self._room_data = RoomDAO().load_data()
         self._rooms = {}
         self._question_loader = QuestionDAO()
         self._player = player
         self._difficulty = difficulty_setting
 
 
-    def load_all_rooms(self) -> dict[str,Room]:
-        output = {}
+    def load_all_rooms(self):
 
-        for room_name in self._room_data:
-            current = self.load_room(room_name)
-            output.update({current.get_name() : current})
+        room_data = RoomDAO().load_data()
 
-        return output
+        for room_name in room_data:
+            current = self.load_room(room_name, room_data[room_name])
+            self._rooms.update({current.get_name() : current})
+
 
     def set_all_rooms(self, rooms:dict[str,Room]):
         self._rooms = rooms
 
+    def load_room(self, name:str , room:dict) -> Room:
 
-
-    def load_room(self, name:str) -> Room:
-
-        chosen_room = self._room_data.get(name)
         name = name
-        description = chosen_room.get("description")
-        exits = chosen_room.get("exits")
-        items = chosen_room.get("items")
-        status = chosen_room.get("locked")
+        description = room.get("description")
+        exits = room.get("exits")
+        items = room.get("items")
+        status = room.get("locked")
 
         return Room(name, description, exits, items, status )
 
-    def load_saved_rooms(self, rooms):
-        self._rooms = rooms
 
 
     def move_room(self, direction:str):
