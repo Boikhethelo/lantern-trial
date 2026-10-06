@@ -8,7 +8,7 @@ SAVE_PATH = Path("resources/save_file.json")
 def save_game(game: Game):
 
     rooms = {}
-    for room in game.get_all_rooms():
+    for room in game.get_all_rooms().values():
         rooms.update(room.to_dict())
 
 
