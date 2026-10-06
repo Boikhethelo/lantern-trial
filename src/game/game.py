@@ -11,26 +11,27 @@ class Game:
     def __init__(self, player:Player , difficulty_setting):
         self._question = None
         self._room_data = RoomDAO().load_data()
-        self._rooms = self._load_all_rooms()
+        self._rooms = {}
         self._question_loader = QuestionDAO()
-
         self._player = player
         self._difficulty = difficulty_setting
 
-        self._room = self._rooms["Guardian Citadel"]
 
-    def _load_all_rooms(self) -> dict[str,Room]:
+    def load_all_rooms(self) -> dict[str,Room]:
         output = {}
 
         for room_name in self._room_data:
-            current = self._load_room(room_name)
+            current = self.load_room(room_name)
             output.update({current.get_name() : current})
 
         return output
 
+    def set_all_rooms(self, rooms:dict[str,Room]):
+        self._rooms = rooms
 
 
-    def _load_room(self, name:str) -> Room:
+
+    def load_room(self, name:str) -> Room:
 
         chosen_room = self._room_data.get(name)
         name = name
@@ -40,6 +41,9 @@ class Game:
         status = chosen_room.get("locked")
 
         return Room(name, description, exits, items, status )
+
+    def load_saved_rooms(self, rooms):
+        self._rooms = rooms
 
 
     def move_room(self, direction:str):
@@ -87,6 +91,12 @@ class Game:
     def get_room(self):
         return self._room
 
+    def get_all_rooms(self):
+        return self._rooms
+
+    def set_room(self, room_name:str):
+        self._room = self.load_room(room_name)
+
     def get_player(self):
         return self._player
 
@@ -99,22 +109,22 @@ class Game:
 
 
     def save(self):
-        storage.save_game(self._player.get_name(), self._player.get_score() , self._difficulty , self._player.get_items() , self._room.get_name())
+        storage.save_game(self)
 
-    def load(self):
-        load_data = storage.load_game()
-        character = load_data.get("character")
-        room = load_data.get("room")
-        score = int(load_data.get("score"))
-        difficulty = int(load_data.get("difficulty"))
-        items = load_data.get("items")
-
-        self._player = PlayerDAO().get_character(character)
-        self._room = self._load_room(room)
-
-        self._player.set_position(room)
-        self._player.set_score(score)
-        self._player.set_items(items)
-        self._difficulty = difficulty
+    # def load(self):
+    #     load_data = storage.load_game()
+    #     character = load_data.get("character")
+    #     room = load_data.get("room")
+    #     score = int(load_data.get("score"))
+    #     difficulty = int(load_data.get("difficulty"))
+    #     items = load_data.get("items")
+    #
+    #     self._player = PlayerDAO().get_character(character)
+    #     self._room = self._load_room(room)
+    #
+    #     self._player.set_position(room)
+    #     self._player.set_score(score)
+    #     self._player.set_items(items)
+    #     self._difficulty = difficulty
 
 

@@ -51,7 +51,7 @@ class RequestValidator:
             return False
 
 
-    def central_power_battery_chamber_requirements(self,items):
+    def central_power_battery_chamber_requirements(self,items) -> bool:
 
         required = 0
         for item in items:
@@ -63,7 +63,7 @@ class RequestValidator:
         else:
             return False
 
-    def will_forge_requirements(self,items):
+    def will_forge_requirements(self,items) -> bool:
 
         required = "lens of hope"
         for item in items:

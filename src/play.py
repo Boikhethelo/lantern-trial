@@ -3,6 +3,7 @@ from validation.input_validator import InputValidator
 from player.player_dao import PlayerDAO
 from game.game import Game
 from validation.request_validator import RequestValidator
+from persistence import save_load as storage
 
 
 class Play:
@@ -24,7 +25,7 @@ class Play:
             case "inventory" : display.view_items(self.game.get_player().get_items())
             case "help"  : display.view_help()
             case "save"  : self.game.save()
-            case "load" : self.game.load()
+            case "load" : self._load_game()
 
         return True
 
@@ -76,12 +77,16 @@ class Play:
             self.game.get_player().add_item(chosen_item)
             self.game.get_room().remove_item(chosen_item)
 
+        self._check_requirements()
+
+
+
+    def _check_requirements(self):
+        if self.validator.will_forge_requirements(self.game.get_player().get_items()):
+            self.game.unlock_room("Will Forge")
 
         if self.validator.central_power_battery_chamber_requirements(self.game.get_player().get_items()):
             self.game.unlock_room("Central Power Battery Chamber")
-
-        if self.validator.will_forge_requirements(self.game.get_player().get_items()):
-            self.game.unlock_room("Will Forge")
 
 
 
@@ -91,17 +96,47 @@ class Play:
         else:
             return False
 
+    def _save(self):
+        storage.save_game(self.game)
+
+    def _load_game(self) -> Game:
+        load_data = storage.load_game()
+        player = self.player_loader.get_character(load_data.get("character"))
+        player.set_items(load_data.get("items"))
+        player.set_position(load_data.get("position"))
+        difficulty = int(load_data.get("difficulty"))
+        score = int(load_data.get("score"))
+        loaded_game = Game(player, difficulty)
+        loaded_game.set_room(load_data.get("position"))
+        rooms = load_data.get("rooms")
+        room_dic = {}
+
+        for room in rooms:
+            room_obj = loaded_game.load_room(room)
+            room_dic.update({room: room_obj})
+
+        loaded_game.set_all_rooms(room_dic)
+
+        return loaded_game
+
+
 
     def _start(self):
         display.start()
+        game_choice = input("Type 'load' to continue a previous game? ")
 
-        choice = int(input("Select a character : "))
-        character = self.validator.get_character(choice)
+        if game_choice.strip().lower() == "load":
+            return self._load_game()
+        else:
+            character_choice = int(input("Select a character : "))
+            difficulty = int(input("Select a difficulty : "))
+            character = self.validator.get_character(character_choice)
+            player = self.player_loader.get_character(character)
+            new_game = Game(player, difficulty)
+            new_game.load_all_rooms()
+            new_game.set_room("Guardian Citadel")
+            return Game(player, difficulty)
 
-
-        player = self.player_loader.get_character(character)
-
-        return Game(player, 1)
 
 
     def main(self) -> None:

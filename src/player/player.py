@@ -36,6 +36,7 @@ class Player:
     def get_items(self) -> list[str]:
         return self._items
 
+
     def get_score(self) -> int:
         return self._score
 
