@@ -4,7 +4,7 @@ class Room:
         self._description = description
         self._exits = exits
         self._items = self._item_loader(items)
-        self._status = status
+        self._locked = status
 
     def get_name(self) -> str:
         return self._name
@@ -22,13 +22,23 @@ class Room:
         self._items.remove(item)
 
     def get_status(self) -> bool:
-        return self._status
+        return self._locked
 
     def set_status(self, status: bool):
-        self._status = status
+        self._locked = status
 
     def _item_loader(self, items : list[str]) -> list[str]:
         return [item.strip().lower() for item in items]
+
+    def to_dict(self):
+        return {
+            self._name : {
+                "description" : self._description,
+                "exits" : self._exits,
+                "items" : self._items,
+                "locked" : self._locked
+            }
+        }
 
 
 
