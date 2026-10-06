@@ -25,7 +25,7 @@ class Play:
             case "inventory" : display.view_items(self.game.get_player().get_items())
             case "help"  : display.view_help()
             case "save"  : self._save()
-            case "load" : self._load_game()
+            case "load" : self.game = self._load_game()
 
         return True
 
@@ -107,6 +107,7 @@ class Play:
         difficulty = int(load_data.get("difficulty"))
         score = int(load_data.get("score"))
         loaded_game = Game(player, difficulty)
+        loaded_game.set_all_rooms(load_data.get("rooms"))
         loaded_game.set_room(load_data.get("position"))
         rooms = load_data.get("rooms")
         room_dic = {}
