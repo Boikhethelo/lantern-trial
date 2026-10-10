@@ -1,3 +1,4 @@
+from question.question import Question
 from question.question_dao import QuestionDAO
 from room.room import Room
 from room.room_dao import RoomDAO
@@ -8,10 +9,13 @@ import display.display as display
 class Game:
     def __init__(self, player:Player , difficulty_setting):
         self._question = None
+        self._questions = []
         self._rooms = {}
         self._question_loader = QuestionDAO()
         self._player = player
         self._difficulty = difficulty_setting
+
+
 
 
     def load_all_rooms(self):
@@ -41,32 +45,26 @@ class Game:
     def move_room(self, direction:str):
 
         exits : dict[str,str] = self.get_room().get_exits()
-
         name : str | None = exits.get(direction)
-
         next_room = self._rooms.get(name)
+        self._room = next_room
+        self._player.set_position(self._room.get_name())
+        return "Moved to " + self._room.get_name()
 
-
-        if not next_room.get_status():
-            self._room = next_room
-            self._player.set_position(self._room.get_name())
-            return "Moved to " + self._room.get_name()
-
-        else:
-            return "Locked! "
 
 
     def view(self):
         display.view_room(self._room.get_name() , self.get_room().get_description())
         display.view_items(self._room.get_items())
 
-    def load_trial(self) -> bool:
+    def load_question(self) -> Question | None:
 
         self._question = self._question_loader.load_question(self._room.get_name(), self._difficulty, self._player.get_name())
         if self._question:
-            return True
+            self._questions.append(self._question)
+            return self._question
         else:
-            return False
+            return None
 
 
     def get_question(self):

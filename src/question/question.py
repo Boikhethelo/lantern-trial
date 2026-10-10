@@ -8,18 +8,18 @@ class Question:
         self._hint = hint
         self._character = character
 
-    def get_id(self):
+    def get_id(self) -> int:
         return self._id
-    def get_room(self):
+    def get_room(self) -> str:
         return self._room
-    def get_difficulty(self):
+    def get_difficulty(self) -> int:
         return self._difficulty
-    def get_question(self):
+    def get_question(self) -> str:
         return self._question
-    def get_answer(self):
+    def get_answer(self) -> str:
         return self._answer
-    def get_hint(self):
+    def get_hint(self) -> str:
         return self._hint
-    def get_character(self):
+    def get_character(self) -> str:
         return self._character
 

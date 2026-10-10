@@ -5,6 +5,8 @@ class RequestValidator:
         self.answer = ''
         self.trial_items = ["lens of hope" , "lens of will" , "lens of resolve"]
 
+
+
     def get_character(self,choice: int) -> str:
         if choice == "":
             return "Hal Jordan"
@@ -17,7 +19,7 @@ class RequestValidator:
 
         return "Hal Jordan"
 
-    def inventory_check(self, items:list[str], requested : str):
+    def inventory_check(self, items:list[str], requested : str) -> bool:
 
         parsed_items = [item.strip().lower() for item in items]
 
@@ -28,23 +30,27 @@ class RequestValidator:
 
 
 
-    def validate_move(self,direction: str , room: Room):
+    def validate_move(self,direction: str , room: Room , locked: bool):
         exits = room.get_exits()
-        if direction in exits.keys():
+        if direction in exits.keys() and locked != True:
             return True
         else:
             return False
 
-    def is_trial_item(self, item:str, room: Room):
-        room_items = [item.strip().lower() for item in room.get_items()]
+    def is_trial_item(self, item:str, room_items: list[str]):
+
         if item.strip().lower() in room_items and item in self.trial_items:
             return True
         else:
             return False
 
+    def is_final_room(self,direction : str, room_exits : dict):
 
-    def check_item(self, item: str , room: Room):
-        room_items = [item.strip().lower() for item in room.get_items()]
+        return room_exits[direction]
+
+
+    def check_item(self, item: str , room_items: list[str]):
+
         if item.strip().lower() in room_items:
             return True
         else:

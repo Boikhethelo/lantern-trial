@@ -5,19 +5,13 @@ def view_help():
 def start():
     """TODO"""
 
-def view_items(items):
-    # for item in items:
-    #     print(item)
-
+def final():
     """TODO"""
 
-def view_room(room , description):
-    """TODO"""
 
-def view_question(question):
-    """TODO"""
 
-def view_move(result):
+def view(result):
     print(result)
+
 
 

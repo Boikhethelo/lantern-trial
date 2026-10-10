@@ -10,7 +10,7 @@ class Player:
         self._position = ""
 
         self._items = []
-        self._score = 0
+        self._charge = 0
 
     def get_name(self ) -> str:
         return self._name
@@ -31,20 +31,20 @@ class Player:
         self._items = items
 
     def set_score(self, score: int):
-        self._score = score
+        self._charge = score
 
     def get_items(self) -> list[str]:
         return self._items
 
 
     def get_score(self) -> int:
-        return self._score
+        return self._charge
 
     def add_item(self, item : str):
         self._items.append(item)
 
-    def add_score(self, score: int):
-        self._score += score
+    def use_charge(self, cost: int):
+        self._charge -= cost
 
 
 
