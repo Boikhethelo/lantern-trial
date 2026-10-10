@@ -14,6 +14,6 @@ class Router:
             case "inventory" : return game.get_player().get_items()
             case "help"  : return "help"
             case "save"  : return handlers.save(game)
-            case "load" : handlers.load_game()
+            case "load" : return handlers.load_game()
 
         return ""

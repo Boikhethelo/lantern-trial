@@ -1,7 +1,6 @@
 from game.game import Game
 from player.player_dao import PlayerDAO
 from question.question import Question
-from trials.trial_runner import TrialRunner
 from validation.request_validator import RequestValidator
 import display.display as display
 from persistence import save_load as storage
@@ -81,16 +80,20 @@ class Handlers:
     def run_trial(self, game: Game , chosen_item : str, question: Question  , user_input:str) -> str:
 
 
-        if user_input  == question.get_question():
+
+        if user_input  == question.get_answer():
             game.get_player().add_item(chosen_item)
             game.get_room().remove_item(chosen_item)
 
-            return chosen_item + "Has been added to your inventory"
+            return chosen_item
+        elif user_input == "hint":
+            return question.get_hint()
         else:
             return "Incorrect Answer"
 
 
-    
+
+
 
     def take(self, chosen_item: str ,game:Game ):
         game.get_player().use_charge(10)
@@ -99,15 +102,14 @@ class Handlers:
             return "you already have " + chosen_item
 
         if self.validator.is_trial_item(chosen_item, game.get_room().get_items()):
+            # question = game.load_question()
 
-            question = game.load_question()
-
-            if question is None:
-                game.get_player().add_item(chosen_item)
-                game.get_room().remove_item(chosen_item)
-
-                return "Unable to load active question you have been gifted " + chosen_item
-            else:
+            # if question is None:
+            #     game.get_player().add_item(chosen_item)
+            #     game.get_room().remove_item(chosen_item)
+            #
+            #     return "Unable to load active question you have been gifted " + chosen_item
+            # else:
                 return "trial started"
 
         elif self.validator.check_item(chosen_item, game.get_room().get_items()):

@@ -1,5 +1,4 @@
 import display.display as display
-from trials.trial_runner import TrialRunner
 from validation.input_validator import InputValidator
 from player.player_dao import PlayerDAO
 from validation.request_validator import RequestValidator
@@ -46,6 +45,13 @@ class Play:
                         item = " ".join(parsed_command[1:])
                         active = True
                         question = self.game.load_question()
+                        if question is None:
+                            self.game.get_player().add_item(item)
+                            self.game.get_room().remove_item(item)
+
+                            display.view( "Unable to load active question you have been gifted " + item )
+                            active = False
+                            
                         display.view(question.get_question())
 
                         while active:
