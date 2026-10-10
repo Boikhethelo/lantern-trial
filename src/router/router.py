@@ -1,19 +1,19 @@
 from game.game import Game
-from requests.requests import Requests
+from handlers.handlers import Handlers
 
 
 class Router:
 
-    def route(self, commands: list[str] , requests:Requests , game:Game) -> str  :
+    def route(self, commands: list[str] , handlers:Handlers , game:Game) -> str  :
         match commands[0]:
-            case "go": return requests.move(commands[1]  , game)
+            case "go": return handlers.move(commands[1], game)
             case "look" : return game.view()
-            case "take" : return requests.take(" ".join(commands[1:]), game)
-            case "use"  : return requests.use(" ".join(commands[1:]), game)
+            case "take" : return handlers.take(" ".join(commands[1:]), game)
+            case "use"  : return handlers.use(" ".join(commands[1:]), game)
             case "charge" : return "TODO"
             case "inventory" : return game.get_player().get_items()
             case "help"  : return "help"
-            case "save"  : return requests.save(game)
-            case "load" : requests.load_game()
+            case "save"  : return handlers.save(game)
+            case "load" : handlers.load_game()
 
         return ""

@@ -1,8 +1,9 @@
 import display.display as display
+from trials.trial_runner import TrialRunner
 from validation.input_validator import InputValidator
 from player.player_dao import PlayerDAO
 from validation.request_validator import RequestValidator
-from requests.requests import Requests
+from handlers.handlers import Handlers
 from router.router import Router
 
 
@@ -13,7 +14,7 @@ class Play:
         self.player_loader = PlayerDAO()
         self.game = None
         self.validator = RequestValidator()
-        self.requests = Requests(self.validator)
+        self.handlers = Handlers(self.validator)
         self.router = Router()
 
     def main(self) -> None:
@@ -21,9 +22,9 @@ class Play:
         game_choice = input("Type 'load' to continue a previous game? ")
 
         if game_choice.strip().lower() == "load":
-            self.game = self.requests.load_game()
+            self.game = self.handlers.load_game()
         else:
-            self.game = self.requests.start()
+            self.game = self.handlers.start()
 
         run = True
 
@@ -38,9 +39,28 @@ class Play:
 
 
                 if len(parsed_command)  > 0:
-                    result = self.router.route(parsed_command, self.requests, self.game)
+                    result = self.router.route(parsed_command, self.handlers, self.game)
                     display.view(result)
-                    display.view(self.requests.check_requirements(self.game))
+                    if result == "trial started":
+
+                        item = " ".join(parsed_command[1:])
+                        active = True
+                        question = self.game.load_question()
+                        display.view(question.get_question())
+
+                        while active:
+                            answer = input("what is your answer? ").strip().lower()
+                            if answer not in ["exit" , "leave"]:
+                                result = self.handlers.run_trial(self.game , item , question , answer  )
+                                display.view(result)
+                            else:
+                                display.view("You have left the trial")
+                                active = False
+                            if item == result:
+                                active = False
+
+
+                    display.view(self.handlers.check_requirements(self.game))
                 else:
                     print("Invalid command")
 

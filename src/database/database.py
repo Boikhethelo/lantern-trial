@@ -37,7 +37,7 @@ class Database:
                 conn.close()
 
 
-    def get_question(self, room: str, difficulty: int, character: str) -> dict | None:
+    def get_question(self, room: str, difficulty: int, character: str) -> dict :
         conn = self.connection()
         conn.row_factory = sqlite3.Row
         try:

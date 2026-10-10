@@ -53,9 +53,13 @@ class Game:
 
 
 
-    def view(self):
+    def view(self) -> str:
         display.view_room(self._room.get_name() , self.get_room().get_description())
         display.view_items(self._room.get_items())
+        
+        return "Your in " + self._room.get_name() + " " + self._room().get_description() + "\n Items you see :" + self._room.get_items().split(" ")
+
+
 
     def load_question(self) -> Question | None:
 

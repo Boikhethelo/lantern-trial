@@ -10,7 +10,7 @@ class Player:
         self._position = ""
 
         self._items = []
-        self._charge = 0
+        self._charge = 100
 
     def get_name(self ) -> str:
         return self._name

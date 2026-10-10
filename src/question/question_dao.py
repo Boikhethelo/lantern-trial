@@ -8,16 +8,16 @@ class QuestionDAO:
 
     def load_question(self, room_name:str , difficulty: int , character:str) -> Question | None:
 
-        question_data = self.sql_database.get_question(room_name,difficulty, character)
+        question_data : dict = self.sql_database.get_question(room_name,difficulty, character)
         if not question_data:
             return None
 
-        q_id = question_data.get("id")
-        question = question_data.get("question")
-        answer = question_data.get("answer")
-        hint = question_data.get("hint")
+        q_id : int = question_data.get("id")
+        question : str = question_data.get("question")
+        answer : str = question_data.get("answer")
+        hint : str = question_data.get("hint")
 
-        return Question(q_id, room_name, difficulty, question, answer, hint, character)
+        return Question(q_id, room_name, difficulty, question, answer, hint)
 
 
 

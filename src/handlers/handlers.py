@@ -1,13 +1,14 @@
 from game.game import Game
 from player.player_dao import PlayerDAO
-from trials.standard_trial import TrialRunner
+from question.question import Question
+from trials.trial_runner import TrialRunner
 from validation.request_validator import RequestValidator
 import display.display as display
 from persistence import save_load as storage
 
 
-class Requests:
-    def __int__(self, validator: RequestValidator):
+class Handlers:
+    def __init__(self, validator: RequestValidator):
         self.validator = validator
         self.player_loader = PlayerDAO()
 
@@ -51,20 +52,23 @@ class Requests:
 
 
     def check_requirements(self , game) -> str:
+
+        output = ""
         if self.validator.will_forge_requirements(game.get_player().get_items()):
             game.unlock_room("Will Forge")
-            return "Will Forged has been unlocked"
+            output += " Will Forged has been unlocked"
 
         if self.validator.central_power_battery_chamber_requirements(game.get_player().get_items()):
             game.unlock_room("Central Power Battery Chamber")
-            return "Central Power Battery Chamber has been unlocked"
+            output += "Central Power Battery Chamber has been unlocked"
 
-        return ""
+        return output
 
     def move(self, direction: str , game: Game) -> str:
 
 
-        if self.validator.validate_move(direction , game.get_room() , game.get_room().get_status()):
+        if self.validator.validate_move(direction , game.get_room().get_exits() , game.get_all_rooms()):
+
             return game.move_room(direction)
 
         elif game.get_room().get_name() == "Central Power Battery Chamber":
@@ -73,6 +77,20 @@ class Requests:
             return "Locked"
 
         return ''
+
+    def run_trial(self, game: Game , chosen_item : str, question: Question  , user_input:str) -> str:
+
+
+        if user_input  == question.get_question():
+            game.get_player().add_item(chosen_item)
+            game.get_room().remove_item(chosen_item)
+
+            return chosen_item + "Has been added to your inventory"
+        else:
+            return "Incorrect Answer"
+
+
+    
 
     def take(self, chosen_item: str ,game:Game ):
         game.get_player().use_charge(10)
@@ -83,33 +101,14 @@ class Requests:
         if self.validator.is_trial_item(chosen_item, game.get_room().get_items()):
 
             question = game.load_question()
-            trial = TrialRunner(question.get_hint(), question.get_question(), question.get_answer(),
-                                question.get_character(), game.get_player().get_name())
 
-            if trial is None:
+            if question is None:
                 game.get_player().add_item(chosen_item)
                 game.get_room().remove_item(chosen_item)
 
                 return "Unable to load active question you have been gifted " + chosen_item
-
-            active = True
-            while active:
-                display.view(trial.get_question())
-                answer = input("Enter your answer: ")
-                cleaned_answer = answer.lower().strip()
-                result = trial.standard_trial(cleaned_answer)
-                display.view(result)
-
-                if result in ["correct"]:
-                    game.get_player().add_item(chosen_item)
-                    game.get_room().remove_item(chosen_item)
-                    active = False
-                    return chosen_item + "Has been added to your inventory"
-
-                if result in ["exit"]:
-                    active = False
-                    return "You've decided to exit the trial"
-            return None
+            else:
+                return "trial started"
 
         elif self.validator.check_item(chosen_item, game.get_room().get_items()):
             game.get_player().add_item(chosen_item)
@@ -121,7 +120,7 @@ class Requests:
             return ""
 
 
-    def use(self, game:Game , command:str) -> str:
+    def use(self , command:str, game:Game) -> str:
         game.get_player().use_charge(10)
 
         final_trial = {

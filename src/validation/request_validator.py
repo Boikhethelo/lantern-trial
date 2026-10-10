@@ -30,10 +30,15 @@ class RequestValidator:
 
 
 
-    def validate_move(self,direction: str , room: Room , locked: bool):
-        exits = room.get_exits()
-        if direction in exits.keys() and locked != True:
-            return True
+    def validate_move(self,direction: str , exits: dict , rooms:dict):
+
+        if direction in exits.keys():
+            next_room = rooms.get(exits[direction])
+
+            if not next_room.get_status():
+                return True
+            else:
+                return False
         else:
             return False
 
