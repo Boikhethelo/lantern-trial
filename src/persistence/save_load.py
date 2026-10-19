@@ -1,6 +1,11 @@
+import json
+from pathlib import Path
+
 
 class SaveStore:
-    def __init__(self, path=Path("resources/save_file.json")):
+    """Reads and writes plain dictionaries. It knows nothing about Game."""
+
+    def __init__(self, path: Path = Path("resources/save_file.json")):
         self._path = path
 
     def save(self, data: dict) -> None:
@@ -12,7 +17,7 @@ class SaveStore:
         if not self._path.exists():
             return None
         try:
-            with open(self._path) as file:
+            with open(self._path, "r") as file:
                 data = json.load(file)
         except json.JSONDecodeError:
             return None
