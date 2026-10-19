@@ -29,27 +29,32 @@
     "description" : "Molten green energy pours through channels in the floor. The air presses against your ring, daring you to falter.",
     "exits" : {"south": "Hall of Lanterns" },
     "items" : ["Lens of Will"],
-    "locked" : true
+    "locked" : true,
+    "requires": ["lens of hope"],
+    "trial_items": ["lens of will"]
   },
 
   "Garden of Mogo": {
     "description": "A living garden on the sentient planet Mogo. Half the plants are wilting, and a faint blue glow pulses at the centre.",
     "exits": { "north": "Hall of Lanterns" },
     "items": ["Lens of Hope"],
-    "locked": false
+    "locked": false,
+    "trial_items": ["lens of hope"]
   },
 
   "Void of Fear" : {
     "description" : "Darkness swallows the walls. Your ring flickers, and something unseen whispers just behind you.",
     "exits" : {"west": "Hall of Lanterns", "east": "Central Power Battery Chamber"},
     "items" : ["Lens of Resolve"],
-    "locked" : false
+    "locked" : false,
+    "trial_items": ["lens of resolve"]
   },
 
   "Central Power Battery Chamber" : {
     "description" : "The Central Power Battery towers above you, a colossal lantern blazing with the light of a billion wills.",
     "exits" : {"west": "Void of Fear"},
     "items" : [],
-    "locked" : true
+    "locked" : true ,
+    "requires": ["lens of will", "lens of hope", "lens of resolve"]
   }
 }

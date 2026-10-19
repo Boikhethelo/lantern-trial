@@ -40,6 +40,9 @@ class Player:
     def get_score(self) -> int:
         return self._charge
 
+    def has_item(self, item: str) -> bool:
+        return item.strip().lower() in [i.strip().lower() for i in self._items]
+
     def add_item(self, item : str):
         self._items.append(item)
 

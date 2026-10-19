@@ -1,19 +1,16 @@
-from game.game import Game
-from handlers.handlers import Handlers
-
 
 class Router:
+    def __init__(self, handlers):
+        self._commands = {
+            "go":   lambda args, game: handlers.move(args[0], game),
+            "look": lambda args, game: game.view(),
+            "take": lambda args, game: handlers.take(" ".join(args), game),
+            "use":  lambda args, game: handlers.use(" ".join(args), game),
+            "save": lambda args, game: handlers.save(game),
+            "load": lambda args, game: handlers.load(),
+            # inventory, charge, help follow the same pattern
+        }
 
-    def route(self, commands: list[str] , handlers:Handlers , game:Game) -> str  :
-        match commands[0]:
-            case "go": return handlers.move(commands[1], game)
-            case "look" : return game.view()
-            case "take" : return handlers.take(" ".join(commands[1:]), game)
-            case "use"  : return handlers.use(" ".join(commands[1:]), game)
-            case "charge" : return "TODO"
-            case "inventory" : return game.get_player().get_items()
-            case "help"  : return "help"
-            case "save"  : return handlers.save(game)
-            case "load" : return handlers.load_game()
-
-        return ""
+    def route(self, parts, game):
+        handler = self._commands.get(parts[0])
+        return handler(parts[1:], game) if handler else ""

@@ -1,84 +1,36 @@
-import display.display as display
-from validation.input_validator import InputValidator
-from player.player_dao import PlayerDAO
-from validation.request_validator import RequestValidator
-from handlers.handlers import Handlers
-from router.router import Router
-from game.game import Game
-
-
 class Play:
+    def __init__(self, menu, router, handlers, input_validator, ask=input, show=display.view): ...
 
-    def __init__(self):
-        self.input_validator = InputValidator()
-        self.player_loader = PlayerDAO()
-        self.game = None
-        self.validator = RequestValidator()
-        self.handlers = Handlers(self.validator)
-        self.router = Router()
-
-    def main(self) -> None:
+    def main(self):
         display.start()
-        game_choice = input("Type 'load' to continue a previous game? ")
-
-        if game_choice.strip().lower() == "load":
-            result = self.router.route(parsed_command, self.handlers, self.game)
-
-            if isinstance(result, Game):
-                self.game = result
-                result = "Game loaded"
-
-            display.view(result)
-            self.game = self.handlers.load_game()
-        else:
-            self.game = self.handlers.start()
-
-        run = True
-
-        while run:
-            unlocked = self.handlers.check_requirements(self.game)
+        self._game = self._menu.run()
+        while True:
+            unlocked = self._handlers.unlock_rooms(self._game)
             if unlocked:
-                display.view(unlocked)
+                self._show(unlocked)
 
-            raw_command : str = input("What would you like to do next : ")
+            raw = self._ask("What would you like to do next : ").strip().lower()
+            if raw in ("exit", "quit"):
+                break
 
-            if raw_command in ["exit" , "quit"]:
-                run = False
-            else:
-                parsed_command = self.input_validator.validate_command(raw_command)
+            parts = self._input_validator.validate_command(raw)
+            if not parts:
+                self._show("Invalid command")
+                continue
 
+            result = self._router.route(parts, self._game)
+            if isinstance(result, Game):      # the load command returns a whole game
+                self._game = result
+                result = "Game loaded"
+            self._show(result)
 
-                if len(parsed_command)  > 0:
-                    result = self.router.route(parsed_command, self.handlers, self.game)
-                    display.view(result)
-
-                    if result == "trial started":
-                        question = self.game.load_question()
-                        item = " ".join(parsed_command[1:])
-
-                        if question is None:
-                            display.view(self.handlers.run_trial(self.game, item, None, ""))
-                            self.game.get_player().add_item(item)
-                            self.game.get_room().remove_item(item)
-                        else:
-                            display.view(question.get_question())
-                            active = True
-
-                            while active:
-                                answer = input("what is your answer? ").strip().lower()
-                                if answer not in ["exit", "leave"]:
-                                    result = self.handlers.run_trial(self.game, item, question, answer)
-                                    display.view(result)
-                                else:
-                                    display.view("You have left the trial")
-                                    active = False
-                                if item == result:
-                                    active = False
-
-                else:
-                    print("Invalid command")
+def build():
+    ask, show = input, display.view
+    factory = GameFactory(PlayerDAO(), RoomDAO(), QuestionDAO())
+    store = SaveStore()
+    handlers = Handlers(Rules(), TrialController(ask, show), store, factory, ask)
+    return Play(StartMenu(factory, store, ask, show), Router(handlers), handlers,
+                InputValidator(), ask, show)
 
 if __name__ == "__main__":
-    play = Play()
-    play.main()
-
+    build().main()

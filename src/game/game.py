@@ -1,108 +1,68 @@
 from question.question import Question
-from question.question_dao import QuestionDAO
 from room.room import Room
-from room.room_dao import RoomDAO
 from player.player import Player
 
-import display.display as display
 
 class Game:
-    def __init__(self, player:Player , difficulty_setting):
-        self._question = None
-        self._questions = []
-        self._rooms = {}
-        self._question_loader = QuestionDAO()
+    """Holds game state. It builds nothing and prints nothing."""
+
+    def __init__(self, player: Player, difficulty: int, rooms: dict[str, Room], questions, start_room: str):
         self._player = player
-        self._difficulty = difficulty_setting
-
-
-
-
-    def load_all_rooms(self):
-
-        room_data = RoomDAO().load_data()
-
-        for room_name in room_data:
-            current = self.load_room(room_name, room_data[room_name])
-            self._rooms.update({current.get_name() : current})
-
-
-    def set_all_rooms(self, rooms:dict[str,Room]):
+        self._difficulty = difficulty
         self._rooms = rooms
+        self._questions = questions          # anything with load_question(room, difficulty, character)
+        self._room = rooms[start_room]
+        self._player.set_position(start_room)
 
-    def load_room(self, name:str , room:dict) -> Room:
+    def get_room(self) -> Room:
+        return self._room
 
-        name = name
-        description = room.get("description")
-        exits = room.get("exits")
-        items = room.get("items")
-        status = room.get("locked")
+    def get_all_rooms(self) -> dict[str, Room]:
+        return self._rooms
 
-        return Room(name, description, exits, items, status )
+    def get_player(self) -> Player:
+        return self._player
 
+    def get_difficulty(self) -> int:
+        return self._difficulty
 
-
-    def move_room(self, direction:str):
-
-        exits : dict[str,str] = self.get_room().get_exits()
-        name : str | None = exits.get(direction)
-        next_room = self._rooms.get(name)
-        self._room = next_room
+    def move_room(self, direction: str) -> str:
+        self._room = self._rooms[self._room.get_exits()[direction]]
         self._player.set_position(self._room.get_name())
         return "Moved to " + self._room.get_name()
+
+    def unlock_room(self, name: str) -> None:
+        self._rooms[name].set_status(False)
+
+    def collect(self, item: str) -> None:
+        """Move an item from the current room into the player's inventory."""
+        name = item.strip().lower()
+        self._room.remove_item(name)
+        self._player.add_item(name)
+
+    def load_question(self) -> Question | None:
+        return self._questions.load_question(self._room.get_name(), self._difficulty, self._player.get_name())
 
     def view(self) -> str:
         items = ", ".join(self._room.get_items()) or "nothing"
         exits = ", ".join(self._room.get_exits().keys())
-
         return (f"You are in {self._room.get_name()}. {self._room.get_description()}\n"
                 f"You see: {items}\n"
                 f"Exits: {exits}")
 
+    def snapshot(self) -> dict:
+        rooms = {}
+        for room in self._rooms.values():
+            rooms.update(room.to_dict())
 
-
-    def load_question(self) -> Question | None:
-
-        self._question = self._question_loader.load_question(self._room.get_name(), self._difficulty, self._player.get_name())
-        if self._question:
-            self._questions.append(self._question)
-            return self._question
-        else:
-            return None
-
-
-    def get_question(self):
-        return self._question.get_question()
-
-    def get_answer(self):
-        return self._question.get_answer()
-
-
-    def view_items_in_room(self):
-        return self._room.get_items()
-
-
-    def get_room(self):
-        return self._room
-
-    def get_all_rooms(self):
-        return self._rooms
-
-    def set_room(self, room_name:str):
-        self._room = self._rooms[room_name]
-
-    def get_player(self):
-        return self._player
-
-    def get_difficulty(self):
-        return self._difficulty
-
-    def view_player_items(self):
-        return self._player.get_items()
-
-
-    def unlock_room(self, room:str):
-            self._rooms[room].set_status(False)
+        return {
+            "character": self._player.get_name(),
+            "charge": self._player.get_score(),
+            "difficulty": self._difficulty,
+            "items": self._player.get_items(),
+            "position": self._room.get_name(),
+            "rooms": rooms,
+        }
 
 
 
