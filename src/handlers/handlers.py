@@ -34,7 +34,7 @@ class Handlers:
             player.set_items(load_data.get("items"))
             player.set_position(load_data.get("position"))
             difficulty = int(load_data.get("difficulty"))
-            charge = int(load_data.get("charge"))
+            player.set_score(int(load_data.get("charge")))
             loaded_game = Game(player, difficulty)
 
             rooms = load_data.get("rooms")
@@ -49,19 +49,21 @@ class Handlers:
 
             return loaded_game
 
+    def check_requirements(self, game) -> str:
+        items = game.get_player().get_items()
+        rooms = game.get_all_rooms()
+        messages = []
 
-    def check_requirements(self , game) -> str:
-
-        output = ""
-        if self.validator.will_forge_requirements(game.get_player().get_items()):
+        if self.validator.will_forge_requirements(items) and rooms["Will Forge"].get_status():
             game.unlock_room("Will Forge")
-            output += " Will Forged has been unlocked"
+            messages.append("Will Forge has been unlocked")
 
-        if self.validator.central_power_battery_chamber_requirements(game.get_player().get_items()):
+        chamber = rooms["Central Power Battery Chamber"]
+        if self.validator.central_power_battery_chamber_requirements(items) and chamber.get_status():
             game.unlock_room("Central Power Battery Chamber")
-            output += "Central Power Battery Chamber has been unlocked"
+            messages.append("Central Power Battery Chamber has been unlocked")
 
-        return output
+        return "\n".join(messages)
 
     def move(self, direction: str , game: Game) -> str:
 
@@ -93,7 +95,7 @@ class Handlers:
 
             return chosen_item
         elif user_input == "hint":
-            return question.get_hint()
+            return question.get_hint() or "No hint for your Lantern on this one"
         else:
             return "Incorrect Answer"
 

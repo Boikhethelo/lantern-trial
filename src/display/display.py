@@ -10,7 +10,7 @@ def final():
 
 
 
-def view(result):
+def view(result:str):
     print(result)
 
 

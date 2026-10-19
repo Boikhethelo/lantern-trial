@@ -51,12 +51,13 @@ class Game:
         self._player.set_position(self._room.get_name())
         return "Moved to " + self._room.get_name()
 
-
-
     def view(self) -> str:
+        items = ", ".join(self._room.get_items()) or "nothing"
+        exits = ", ".join(self._room.get_exits().keys())
 
-
-        return "Your in " + self._room.get_name() + " " + self._room().get_description() + "\n Items you see :" + self._rooms.get_items()
+        return (f"You are in {self._room.get_name()}. {self._room.get_description()}\n"
+                f"You see: {items}\n"
+                f"Exits: {exits}")
 
 
 
