@@ -24,15 +24,24 @@ class Play:
         self._game = None
 
     def main(self) -> None:
-        display.start()
+        display.show_title()
+        display.opening_cinematic()
         self._game = self._menu.run()
 
+
         while True:
+            charge = self._game.get_charge()
+
+            if charge < 0:
+                self._show("Game over your ring has run out of charge")
+                break
+
             unlocked = self._handlers.unlock_rooms(self._game)
             if unlocked:
                 self._show(unlocked)
 
             raw_command = self._ask("What would you like to do next : ").strip().lower()
+            self._game.get_player().use_charge(1)
             if raw_command in ("exit", "quit"):
                 break
 
@@ -43,11 +52,18 @@ class Play:
 
             result = self._router.route(parts, self._game)
 
-            if isinstance(result, Game):          # the load command returns a whole game
+            if isinstance(result, Game):
                 self._game = result
                 result = "Game loaded"
 
             self._show(result)
+
+            if(result == "game over"):
+                break
+
+            elif(result == "Final Trial Complete"):
+                display.won()
+                break
 
 
 def build() -> Play:

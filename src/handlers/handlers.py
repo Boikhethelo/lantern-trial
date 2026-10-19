@@ -49,7 +49,7 @@ class Handlers:
 
     def use(self, command: str, game: Game) -> str:
         # Unchanged from your version apart from using the injected ask function.
-        game.get_player().use_charge(10)
+        game.get_player().use_charge(5)
 
         final_trial = {"lens of will": False, "lens of hope": False, "lens of resolve": False}
 

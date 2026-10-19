@@ -24,5 +24,8 @@ class PlayerDAO:
 
         return Player(name, sector, strength, weakness)
 
+    def names(self) -> list[str]:
+        return list(self._data.keys())
+
 
 

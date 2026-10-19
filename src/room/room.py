@@ -44,8 +44,6 @@ class Room:
     def set_status(self, status: bool):
         self._locked = status
 
-    def _item_loader(self, items : list[str]) -> list[str]:
-        return [item.strip().lower() for item in items]
 
     def to_dict(self):
         return {

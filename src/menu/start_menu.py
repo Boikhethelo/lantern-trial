@@ -20,6 +20,7 @@ class StartMenu:
 
         character = self._ask_number("Select a character : ", 1, len(names))
         difficulty = self._ask_number("Select a difficulty (1-3) : ", 1, 3)
+
         return self._factory.new_game(character, difficulty)
 
     def _ask_number(self, prompt: str, low: int, high: int) -> int:

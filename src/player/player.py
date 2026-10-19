@@ -30,14 +30,14 @@ class Player:
     def set_items(self, items: list[str]):
         self._items = items
 
-    def set_score(self, score: int):
+    def set_charge(self, score: int):
         self._charge = score
 
     def get_items(self) -> list[str]:
         return self._items
 
 
-    def get_score(self) -> int:
+    def get_charge(self) -> int:
         return self._charge
 
     def has_item(self, item: str) -> bool:

@@ -7,6 +7,7 @@ class TrialController:
 
     def run(self, game, item: str) -> str:
         question = game.load_question()
+        game.get_player().use_charge(10)
 
         if question is None:
             game.collect(item)
