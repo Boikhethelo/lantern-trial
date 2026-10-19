@@ -40,19 +40,13 @@ class Play:
                 if len(parsed_command)  > 0:
                     result = self.router.route(parsed_command, self.handlers, self.game)
                     display.view(result)
+
                     if result == "trial started":
 
-                        item = " ".join(parsed_command[1:])
-                        active = True
                         question = self.game.load_question()
-                        if question is None:
-                            self.game.get_player().add_item(item)
-                            self.game.get_room().remove_item(item)
-
-                            display.view( "Unable to load active question you have been gifted " + item )
-                            active = False
-                            
+                        item = " ".join(parsed_command[1:])
                         display.view(question.get_question())
+                        active = True
 
                         while active:
                             answer = input("what is your answer? ").strip().lower()
