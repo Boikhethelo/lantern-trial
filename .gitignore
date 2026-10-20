@@ -1,4 +1,3 @@
 .venv
 .idea
-.save_file.json
 src/resources/save_file.json
