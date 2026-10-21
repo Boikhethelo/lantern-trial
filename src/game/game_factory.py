@@ -23,7 +23,7 @@ class GameFactory:
     def from_save(self, data: dict) -> Game:
         player = self._players.get_character(data["character"])
         player.set_items(list(data["items"]))
-        player.set_score(int(data["charge"]))
+        player.set_charge(int(data["charge"]))
         rooms = self._build_rooms(data["rooms"])
         return Game(player, int(data["difficulty"]), rooms, self._questions, data["position"])
 

@@ -14,7 +14,7 @@ class PlayerTests(unittest.TestCase):
 
     def test_use_charge_reduces_charge(self):
         player = make_player()
-        start = player.get_score()
+        start = player.get_charge()
 
         player.use_charge(10)
 

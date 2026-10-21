@@ -17,6 +17,7 @@ class Game:
     def get_room(self) -> Room:
         return self._room
 
+
     def get_all_rooms(self) -> dict[str, Room]:
         return self._rooms
 
@@ -57,7 +58,7 @@ class Game:
 
         return {
             "character": self._player.get_name(),
-            "charge": self._player.get_score(),
+            "charge": self._player.get_charge(),
             "difficulty": self._difficulty,
             "items": self._player.get_items(),
             "position": self._room.get_name(),

@@ -1,3 +1,5 @@
 .venv
 .idea
-src/resources/save_file.json
+resources/save_file.json
+*.pyc
+__pycache__/

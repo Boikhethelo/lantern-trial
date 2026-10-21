@@ -46,7 +46,7 @@ class GameFactoryTests(unittest.TestCase):
 
         self.assertEqual(restored.get_room().get_name(), "Armory")
         self.assertEqual(restored.get_player().get_items(), ["spare battery"])
-        self.assertEqual(restored.get_player().get_score(), game.get_player().get_score())
+        self.assertEqual(restored.get_player().get_charge(), game.get_player().get_charge())
         self.assertEqual(restored.get_difficulty(), 2)
 
 

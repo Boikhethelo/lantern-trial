@@ -9,7 +9,7 @@ class Router:
             "take":      lambda args, game: handlers.take(" ".join(args), game),
             "use":       lambda args, game: handlers.use(" ".join(args), game),
             "inventory": lambda args, game: ", ".join(game.get_player().get_items()) or "nothing",
-            "charge":    lambda args, game: f"Charge: {game.get_player().get_score()}",
+            "charge":    lambda args, game: f"Charge: {game.get_player().get_charge()}",
             "help":      lambda args, game: "Commands: " + ", ".join(self._commands) + ", quit",
             "save":      lambda args, game: handlers.save(game),
             "load":      lambda args, game: handlers.load(),

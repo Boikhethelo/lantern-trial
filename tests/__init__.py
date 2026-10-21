@@ -1,6 +1,9 @@
 import os
+import sys
 from pathlib import Path
 
-# The game reads files like "resources/game_data.json", so tests must run from src.
-# This makes that true no matter where the tests are started from.
-os.chdir(Path(__file__).resolve().parents[1])
+SRC = Path(__file__).resolve().parents[1] / "src"
+
+# Let tests import game code (from game.game import Game) and find "resources/...".
+sys.path.insert(0, str(SRC))
+os.chdir(SRC)

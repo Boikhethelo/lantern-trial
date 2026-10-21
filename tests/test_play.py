@@ -35,7 +35,7 @@ class FakeValidator:
 def make_play(game, router, commands):
     replies, shown = iter(commands), []
     play = Play(FakeMenu(game), router, FakeHandlers(), FakeValidator(),
-                ask=lambda prompt: next(replies), show=shown.append)
+                ask=lambda prompt: next(replies), show=shown.append , intro=lambda: None)
     return play, shown
 
 
@@ -58,6 +58,17 @@ class PlayTests(unittest.TestCase):
         self.assertIs(router.games_seen[0], original)
         self.assertIs(router.games_seen[1], loaded)
         self.assertEqual(shown[0], "Game loaded")
+
+class PlayEndingTests(unittest.TestCase):
+
+    def test_game_over_when_the_ring_runs_out_of_charge(self):
+        game = make_game()
+        game.get_player().use_charge(101)          # 100 - 101 = -1
+        play, shown = make_play(game, FakeRouter(), ["look"])
+
+        play.main()
+
+        self.assertIn("Game over your ring has run out of charge", shown)
 
 
 if __name__ == "__main__":

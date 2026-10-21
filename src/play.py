@@ -14,25 +14,25 @@ from validation.input_validator import InputValidator
 
 
 class Play:
-    def __init__(self, menu, router, handlers, input_validator, ask=input, show=display.view):
+    def __init__(self, menu, router, handlers, input_validator, ask=input, show=display.view, intro=display.opening_cinematic()):
         self._menu = menu
         self._router = router
         self._handlers = handlers
         self._input_validator = input_validator
+        self._intro = intro
         self._ask = ask
         self._show = show
         self._game = None
 
     def main(self) -> None:
-        display.show_title()
-        display.opening_cinematic()
+        self._intro()
         self._game = self._menu.run()
 
 
         while True:
-            charge = self._game.get_charge()
+            charge = self._game.get_player().get_charge()
 
-            if charge < 0:
+            if charge <= 0:
                 self._show("Game over your ring has run out of charge")
                 break
 
@@ -41,7 +41,7 @@ class Play:
                 self._show(unlocked)
 
             raw_command = self._ask("What would you like to do next : ").strip().lower()
-            self._game.get_player().use_charge(1)
+
             if raw_command in ("exit", "quit"):
                 break
 
@@ -49,6 +49,8 @@ class Play:
             if not parts:
                 self._show("Invalid command")
                 continue
+            else:
+                self._game.get_player().use_charge(1)
 
             result = self._router.route(parts, self._game)
 
@@ -58,10 +60,7 @@ class Play:
 
             self._show(result)
 
-            if(result == "game over"):
-                break
-
-            elif(result == "Final Trial Complete"):
+            if result == "Final Trial Complete":
                 display.won()
                 break
 
