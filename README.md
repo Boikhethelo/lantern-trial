@@ -1,166 +1,251 @@
 # 💚 Lantern Trials
 
-Welcome to **Lantern Trials**, a text-based adventure game challenge where you'll use your Python skills to guide a rookie Green Lantern through the ancient halls of **Oa**, home of the Green Lantern Corps, in search of the lost power of the **Central Power Battery**.
+A text-based adventure game set in the world of the Green Lantern Corps, written in Python.
+
+The Central Power Battery on Oa has developed a fault. It no longer connects Lanterns to the emotional spectrum, and your ring is down to **one last charge**. Explore the Corps' halls, pass three trials to collect three lenses, then enter the Central Power Battery Chamber, complete the final trial, and speak the oath to recharge your ring.
+
+> *Green Lantern and related characters are trademarks of DC Comics. This is a fan-made learning project and is not affiliated with DC.*
 
 ---
 
-## 📖 GameState Overview
+## 📖 The Goal
 
-The Guardians of the Universe have sealed the Central Power Battery behind three trials of the **Emotional Spectrum**. Your Lantern's ring is nearly out of charge, and the only way to recharge it is to prove yourself worthy.
+**To win:**
 
-To win the game, players must:
+1. Explore the map of Oa.
+2. Pass the three lens trials and collect:
+   - 💚 **Lens of Will** (Will Forge)
+   - 💙 **Lens of Hope** (Garden of Mogo)
+   - 🧡 **Lens of Resolve** (Void of Fear)
+3. Enter the **Central Power Battery Chamber** (it unlocks once you hold all three lenses).
+4. Complete the final trial and say the oath to recharge your ring.
 
-- Explore the map of Oa
-- Solve 3 Spectrum trials
-- Collect:
-  - 💚 **Lens of Will**
-  - 💙 **Lens of Hope**
-  - 🧡 **Lens of Resolve** *(the "fear mastered" trial)*
-- Unlock the final room: **The Central Power Battery Chamber**
+**To lose:** your ring's charge reaches 0.
+
+---
+
+## 🚀 Quick Start
+
+**Requirements:** Python 3.10 or newer.
+
+```bash
+git clone https://github.com/Boikhethelo/lantern-trial.git
+cd lantern-trial
+pip install -r requirements.txt
+python src/play.py
+```
+
+Run the game **from the project root** (the folder that contains `src/`, `resources/` and `tests/`), because the game loads its data from `resources/`.
+
+At the start you can type `load` to continue a saved game, or press Enter to begin a new one. You then pick a character and a difficulty from 1 (easy) to 3 (hard).
+
+---
+
+## 🎮 Commands
+
+| Command | What it does |
+|---|---|
+| `go [direction]` | Move `north`, `south`, `east` or `west`. Locked rooms refuse you. |
+| `look` | Show the room, the items you can see, and the exits. |
+| `take [item]` | Pick up an item. Lenses start a trial first. |
+| `use [item]` | Use an item. In the Chamber, the lenses are used for the final trial. |
+| `inventory` | List what you are carrying. |
+| `charge` | Show your ring's remaining charge. |
+| `help` | List the available commands. |
+| `save` | Save your game. |
+| `load` | Load your saved game. |
+| `quit` / `exit` | Leave the game. |
+
+During a trial you can also type `hint` for a hint (if your Lantern has one) or `leave` to walk away.
+
+### Example
+
+```text
+What would you like to do next : look
+You are in Guardian Citadel. The ancient seat of the Guardians, humming with green light.
+You see: nothing
+Exits: east
+
+What would you like to do next : take lens of hope
+Mogo is a Green Lantern, but he is also a living what?
+what is your answer? hint
+He is enormous and round, and you are standing on him.
+what is your answer? planet
+Correct! lens of hope has been added to your inventory
+Will Forge has been unlocked
+```
+
+---
+
+## ⚡ Charge
+
+Your ring starts with **100 charge**, and everything you do spends it:
+
+| Action | Cost |
+|---|---|
+| Any valid command | 1 |
+| `take` (on top of the command) | 10 |
+| Starting a lens trial | 10 |
+| `use` (on top of the command) | 5 |
+
+So each lens costs about 21 charge, and wasted commands add up. Typos and `quit` are free. When your charge reaches 0, the game is over.
+
+---
+
+## 🧭 The World
+
+```text
+                         [Will Forge] 🔒
+                               |
+[Guardian Citadel]--[Corps Armory]--[Hall of Lanterns]--[Void of Fear]--[Central Power Battery Chamber] 🔒
+                                          |
+                                   [Garden of Mogo]
+
+🔒 = starts locked
+```
+
+| Room | Contents | Notes |
+|---|---|---|
+| Guardian Citadel | nothing | Start here. |
+| Corps Armory | spare battery, Guardian scroll | Ordinary items. |
+| Hall of Lanterns | lantern oath tablet | The hub, with four exits. |
+| Garden of Mogo | 💙 Lens of Hope | Trial of hope. |
+| Will Forge | 💚 Lens of Will | Locked until you hold the Lens of Hope. Trial of willpower. |
+| Void of Fear | 🧡 Lens of Resolve | Trial of courage. |
+| Central Power Battery Chamber | final trial | Locked until you hold all three lenses. |
+
+---
+
+## 🧠 Trials
+
+Taking a lens starts a trial. A question is drawn at random from the database for that room, at your chosen difficulty (or the nearest one if that room has none).
+
+- **Answer** the question to collect the lens.
+- **`hint`** shows a hint. Some hints are only given to one Lantern (for example, Kilowog gets a hint about Oa because he trained rookies there). Other Lanterns see "No hint for your Lantern on this one".
+- **`leave`** walks away without the lens.
+- If a room has no question available, the lens is gifted to you.
+
+Questions are Green Lantern trivia and riddles, and every trial room has questions at all three difficulty levels.
+
+---
+
+## 👥 Characters
+
+Pick one at the start. Characters come from `resources/characters.json`.
+
+| Name | Sector | Strength | Weakness |
+|---|---|---|---|
+| Hal Jordan | 2814 | Fearless | Reckless |
+| John Stewart | 2814 | Disciplined | Haunted by Past Failures |
+| Jessica Cruz | 2814 | Resilient | Crippling Anxiety |
+| Kilowog | 674 | Mentor and Tough | Short Temper |
+
+---
+
+## 💾 Saving and Loading
+
+`save` writes `resources/save_file.json`, and `load` restores it (from the start menu or in game). A save stores:
+
+- your character, charge and difficulty,
+- your inventory and position,
+- the state of every room (items left, locked or unlocked).
+
+The save file is ignored by git. If it is missing or empty, `load` tells you there is no saved game.
 
 ---
 
 ## 🗂️ Project Structure
 
 ```text
-lantern_trial/
-
+lantern-trial/
+├── README.md
+├── requirements.txt          # rich (for the title and intro screens)
+├── resources/
+│   ├── game_data.json        # rooms, exits, items, locks and trial rules
+│   ├── characters.json       # playable Lanterns
+│   ├── questions.db          # SQLite database of trial questions
+│   ├── schema.sql            # creates and seeds the questions table
+│   └── save_file.json        # created by `save` (git-ignored)
+├── src/
+│   ├── play.py               # game loop and the composition root, build()
+│   ├── menu/                 # start menu: new game or load
+│   ├── router/               # maps command words to handlers
+│   ├── handlers/             # move, take, save, load, use, unlock
+│   ├── trial/                # runs a question trial
+│   ├── rules/                # what can be entered and what unlocks
+│   ├── game/                 # Game state and GameFactory
+│   ├── room/ player/ question/   # data classes and their DAOs
+│   ├── database/             # SQLite access for questions
+│   ├── persistence/          # SaveStore: reads and writes plain dictionaries
+│   ├── validation/           # input validation
+│   └── display/              # all printing (uses rich)
+└── tests/                    # unit tests, with helpers and fakes
 ```
 
----
+### Data files
 
-## 👥 Characters
+**`game_data.json`** describes the whole map. Each room looks like this:
 
-Hal Jordan,Sector 2814,Fearless,Reckless
-John Stewart,Sector 2814,Disciplined,Haunted by Past Failures
-Jessica Cruz,Sector 2814,Resilient,Crippling Anxiety
-Kilowog,Sector 674,Mentor and Tough,Short Temper
+```json
+"Will Forge": {
+  "description": "Molten green energy pours through channels in the floor.",
+  "exits": { "south": "Hall of Lanterns" },
+  "items": ["Lens of Will"],
+  "locked": true,
+  "requires": ["lens of hope"],
+  "trial_items": ["lens of will"]
+}
 ```
 
-Your player must be created from one of these entries in `game.py`.
+- `locked` is whether the room starts locked.
+- `requires` lists the items that unlock it automatically.
+- `trial_items` lists items that start a trial when taken.
 
----
+**`questions` table** (in `questions.db`, rebuilt by `schema.sql`):
 
-## 🧭 Provided Rooms
-
-A sample `game_data.json` will be provided with seven Oa-themed rooms and their connections:
-
-- **Guardian Citadel** (start)
-- **Corps Armory**
-- **Hall of Lanterns**
-- **Will Forge** (💚 Trial)
-- **Garden of Mogo** (💙 Trial)
-- **Void of Fear** (🧡 Trial)
-- **Central Power Battery Chamber** (final room)
-
-Each room entry in the JSON defines its name, description, exits (direction to room), and items. The Central Power Battery Chamber should start **locked**.
-
----
-
-## 🧠 Trial Design (Specs Only)
-
-Each trial is triggered when the player tries to `take` the lens in that room. A trial function should decide whether the lens is granted, denied, or already owned. These are the specs for each.
-
-### 💚 Will Forge: Test of Willpower
-
-- The player is asked to hold their ring's charge against an escalating challenge (for example, a series of timed prompts or a "resist the pull" sequence of choices).
-- Failing should not end the game; it should drain something (a turn, a charge, a hint) and let the player try again.
-- Must use at least one piece of player state (charge, inventory, or character trait).
-
-### 💙 Garden of Mogo: Test of Hope
-
-- The player is shown a sacrifice choice, such as giving up an inventory item to help a dying planet-garden bloom.
-- The "right" answer should not be obvious from the item's name alone. Reward players who read the room description.
-- The lens is only granted if the player actually parts with an item.
-
-### 🧡 Void of Fear: Test of Courage
-
-- The player must walk through a darkened sequence of rooms or prompts while their ring flickers.
-- Include at least one choice that tempts the player to retreat.
-- Success requires pushing forward through a minimum number of steps without using `go` to leave.
-
-
----
-
-## 🎮 Player Commands Guide
-
-| Command | Description |
+| Column | Meaning |
 |---|---|
-| `move [direction]` | Move the player in a direction. E.g. `go north` |
-| `look` | Show the current room's description, exits and visible items |
-| `take [item]` | Pick up an item and add it to inventory (may trigger a trial) |
-| `use [item]` | Use an inventory item. E.g. `use ring` could recharge or light a path |
-| `inventory` | Show all items currently carried |
-| `charge` | Show the ring's current charge level |
-| `help` | List all commands with short descriptions |
-| `save_game.py` | Save the current game state to a file |
-| `load_game.py` | Load the previously saved game state |
-| `quit` / `exit` | Exit the game loop |
+| `room` | Which trial room asks it |
+| `difficulty` | 1 easy, 2 medium, 3 hard |
+| `question` / `answer` | The question and its lowercase answer |
+| `hint` | Optional hint |
+| `character` | `NULL` means everyone sees the hint, otherwise only that Lantern |
 
-### 🧑‍💻 Example Input/Output (format only)
+---
 
-```text
-> look
-You are in the Corps Armory.
-Racks of dormant lantern batteries line the walls.
-You see: spare battery, Guardian scroll
-Exits: south, east
+## 🏗️ Design
 
-> take spare battery
-You added the spare battery to your inventory.
+The code is layered so that each class has one job and the pieces are handed to each other, not created inside each other:
 
-> inventory
-You are carrying: spare battery
+- **Single responsibility:** `Game` holds state, `GameFactory` builds games, `Rules` decides what unlocks, `TrialController` runs a trial, `SaveStore` does file access, `Router` maps commands, and `Play` only runs the loop.
+- **Open for extension:** new commands, rooms, requirements, characters and questions are added as data or one new entry, not by rewriting logic.
+- **Dependency injection:** `build()` in `play.py` is the only place that creates the concrete classes. Everything else receives its collaborators, including the `ask` and `show` functions used for input and output, so the pieces can be tested with fakes.
+- **Persistence knows nothing about the game:** `SaveStore` only reads and writes dictionaries, and `Game.snapshot()` produces one.
+
+### Extending the game
+
+- **New character:** add an entry to `resources/characters.json`.
+- **New question:** insert a row into the `questions` table (or add it to `schema.sql`).
+- **New room or lock:** add it to `game_data.json`, with `requires` and `trial_items` as needed.
+- **New command:** add an entry to the dictionary in `src/router/router.py`, and add the word to the valid list in `src/validation/input_validator.py`.
+
+---
+
+## 🧪 Tests
+
+The tests use Python's built-in `unittest`. Run them from the project root:
+
+```bash
+python -m unittest discover -s tests -t .
 ```
 
+Run a single file with:
+
+```bash
+python -m unittest tests.test_rules -v
+```
+
+Most tests use small fakes from `tests/helpers.py` (for example a fake question source), so they need no database, no keyboard and no files.
 
 ---
-
-## ⚔️ Challenges
-
-Tackle these once the basics work. They're ordered roughly by difficulty.
-
-1. **Ring Charge System:** The ring starts with limited charge. Moves and failed trials drain it, and reaching 0 means game over unless the player finds a way to recharge.
-2. **Character-Driven Outcomes:** A Lantern's strength should make one trial easier (a hint, an extra attempt), and their weakness should make another harder.
-3. **Locked Final Room:** The Battery Chamber must refuse entry until all three lenses are in inventory, with a different message depending on which are missing.
-4. **Robust Save/Load:** Loading a save made mid-trial or with a missing file must not crash the game.
-5. **Input Hardening:** Handle empty input, unknown commands, bad directions, and extra whitespace gracefully.
-6. **No Hardcoding:** Rooms, items and exits must come from `game_data.json`, so editing the file changes the world without touching code.
-
----
-
-## Extras
-
-- Write tests for all your classes
-- Store trial prompts in a JSON file and pick randomly
-- Give each character a special power (e.g. Kilowog can brute-force a locked door once)
-- Add a Sinestro-style rival who appears in rooms and drains charge
-- Add a constructs system: `use ring` to create a temporary item (a bridge, a shield)
-- Add colour using `colorama` (green for success, yellow for fear, blue for hope)
-
-**Note:** Only attempt these once all basic functionality is in place.
-
----
-
-## ✅ End Goal
-
-Once the player has all 3 lenses and enters the **Central Power Battery Chamber**, display this:
-
-> "The Spectrum has judged you. With will, hope, and courage, your ring burns brighter than ever. What will you do with such power?"
-
----
-
-## 🧰 Evaluation Checklist
-
-- [ ] GameState starts, runs, and exits cleanly
-- [ ] All commands in the guide work
-- [ ] 5+ characters load 
-- [ ] All three trials are playable, winnable, and retryable
-- [ ] Final room is locked until all lenses are collected
-- [ ] Save/load restores the full game state
-- [ ] Code is split sensibly across the provided files
-- [ ] Tests exist for core classes (bonus)
-
----
-
 
