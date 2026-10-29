@@ -35,7 +35,8 @@ class FakeValidator:
 def make_play(game, router, commands):
     replies, shown = iter(commands), []
     play = Play(FakeMenu(game), router, FakeHandlers(), FakeValidator(),
-                ask=lambda prompt: next(replies), show=shown.append , intro=lambda: None)
+                ask=lambda prompt: next(replies), show=shown.append, intro=lambda: None,
+                on_win=lambda: shown.append("WON"), on_lose=lambda: shown.append("LOST"))
     return play, shown
 
 
@@ -68,7 +69,21 @@ class PlayEndingTests(unittest.TestCase):
 
         play.main()
 
-        self.assertIn("Game over your ring has run out of charge", shown)
+        self.assertIn("LOST", shown)
+
+
+class PlayWinTests(unittest.TestCase):
+
+    def test_completing_the_final_trial_ends_the_game_with_the_win_screen(self):
+        class WinningRouter(FakeRouter):
+            def route(self, parts, game):
+                return "Final Trial Complete"
+
+        play, shown = make_play(make_game(), WinningRouter(), ["use lens of will"])
+
+        play.main()
+
+        self.assertEqual(shown, ["Final Trial Complete", "WON"])
 
 
 if __name__ == "__main__":

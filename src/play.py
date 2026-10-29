@@ -14,12 +14,14 @@ from validation.input_validator import InputValidator
 
 
 class Play:
-    def __init__(self, menu, router, handlers, input_validator, ask=input, show=display.view, intro=display.opening_cinematic()):
+    def __init__(self, menu, router, handlers, input_validator, ask=input, show=display.view, intro=display.opening_cinematic , on_win=display.won , on_lose=display.lost):
         self._menu = menu
         self._router = router
         self._handlers = handlers
         self._input_validator = input_validator
         self._intro = intro
+        self._on_win = on_win
+        self._on_lose = on_lose
         self._ask = ask
         self._show = show
         self._game = None
@@ -33,7 +35,7 @@ class Play:
             charge = self._game.get_player().get_charge()
 
             if charge <= 0:
-                self._show("Game over your ring has run out of charge")
+                self._on_lose()
                 break
 
             unlocked = self._handlers.unlock_rooms(self._game)
@@ -61,7 +63,7 @@ class Play:
             self._show(result)
 
             if result == "Final Trial Complete":
-                display.won()
+                self._on_win()
                 break
 
 

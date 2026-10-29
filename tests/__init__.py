@@ -2,8 +2,8 @@ import os
 import sys
 from pathlib import Path
 
-SRC = Path(__file__).resolve().parents[1] / "src"
+ROOT = Path(__file__).resolve().parents[1]
 
 # Let tests import game code (from game.game import Game) and find "resources/...".
-sys.path.insert(0, str(SRC))
-os.chdir(SRC)
+sys.path.insert(0, str(ROOT))
+os.chdir(ROOT)
