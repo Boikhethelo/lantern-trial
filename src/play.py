@@ -14,7 +14,8 @@ from validation.input_validator import InputValidator
 
 
 class Play:
-    def __init__(self, menu, router, handlers, input_validator, ask=input, show=display.view, intro=display.opening_cinematic , on_win=display.won , on_lose=display.lost):
+    def __init__(self, menu, router, handlers, input_validator, ask=input, show=display.view,
+                 intro=display.opening_cinematic , on_win=display.won , on_lose=display.lost, on_help=display.help):
         self._menu = menu
         self._router = router
         self._handlers = handlers
@@ -22,6 +23,7 @@ class Play:
         self._intro = intro
         self._on_win = on_win
         self._on_lose = on_lose
+        self._on_help = on_help
         self._ask = ask
         self._show = show
         self._game = None
@@ -46,6 +48,9 @@ class Play:
 
             if raw_command in ("exit", "quit"):
                 break
+
+            if raw_command == "help":
+                self._on_help()
 
             parts = self._input_validator.validate_command(raw_command)
             if not parts:
@@ -73,8 +78,11 @@ def build() -> Play:
     factory = GameFactory(PlayerDAO(), RoomDAO(), QuestionDAO())
     store = SaveStore()
     handlers = Handlers(Rules(), TrialController(ask, show), store, factory, ask)
+    win = display.won
+    lose = display.lost
+    help = display.help
 
-    return Play(StartMenu(factory, store, ask, show), Router(handlers), handlers, InputValidator(), ask, show)
+    return Play(StartMenu(factory, store, ask, show), Router(handlers), handlers, InputValidator(), ask, show , win, lose, help)
 
 
 if __name__ == "__main__":

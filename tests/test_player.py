@@ -18,7 +18,7 @@ class PlayerTests(unittest.TestCase):
 
         player.use_charge(10)
 
-        self.assertEqual(player.get_score(), start - 10)
+        self.assertEqual(player.get_charge(), start - 10)
 
 
 if __name__ == "__main__":
