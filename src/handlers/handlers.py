@@ -1,5 +1,5 @@
 from game.game import Game
-
+from trial.final_trial import FinalTrial
 
 class Handlers:
     def __init__(self, rules, trials, store, factory, ask):
@@ -8,6 +8,7 @@ class Handlers:
         self._store = store
         self._factory = factory
         self._ask = ask
+        self._final_trial = FinalTrial()
 
     def move(self, direction: str, game: Game) -> str:
         target = game.get_room().get_exits().get(direction)
@@ -47,26 +48,17 @@ class Handlers:
             return "No saved game found"
         return self._factory.from_save(data)
 
-    def use(self, command: str, game: Game) -> str:
-        # Unchanged from your version apart from using the injected ask function.
-        game.get_player().use_charge(5)
 
-        final_trial = {"lens of will": False, "lens of hope": False, "lens of resolve": False}
+def use(self, command: str, game: Game) -> str:
+    item = command.strip().lower()
 
-        if command not in final_trial:
-            return "used " + command
+    if item not in FinalTrial.LENS_ORDER:
+        return f"You cannot use {item} for the final trial."
 
-        for trial in final_trial:
-            order = self._ask("For the final trial rebuild the lens in the create order by using 'use' command "
-                              "and items collected for the trial rooms ")
-            if trial == order.lower().strip():
-                if not game.get_player().has_item(trial):
-                    return "You dont have this item"
-                final_trial[trial] = True
-            else:
-                return "Incorrect Order"
+    game.get_player().use_charge(5)
 
-        return "Final Trial Complete"
+    return self._final_trial.use_lens(game, item)
+
 
 
 

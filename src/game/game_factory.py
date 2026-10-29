@@ -25,7 +25,8 @@ class GameFactory:
         player.set_items(list(data["items"]))
         player.set_charge(int(data["charge"]))
         rooms = self._build_rooms(data["rooms"])
-        return Game(player, int(data["difficulty"]), rooms, self._questions, data["position"])
+        return Game(player, int(data["difficulty"]), rooms, self._questions, data["position"] ,
+                    final_trial_progress=data.get("final_trial_progress", []) , won=data.get("won", False),)
 
     @staticmethod
     def _build_rooms(room_data: dict) -> dict[str, Room]:

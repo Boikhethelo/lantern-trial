@@ -67,9 +67,11 @@ class Play:
 
             self._show(result)
 
-            if result == "Final Trial Complete":
+            if self._game.has_won():
                 self._on_win()
                 break
+
+
 
 
 def build() -> Play:
@@ -80,7 +82,7 @@ def build() -> Play:
     handlers = Handlers(Rules(), TrialController(ask, show), store, factory, ask)
     win = display.won
     lose = display.lost
-    help = display.help
+    help = display.view_help
 
     return Play(StartMenu(factory, store, ask, show), Router(handlers), handlers, InputValidator(), ask, show , win, lose, help)
 

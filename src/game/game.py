@@ -1,3 +1,4 @@
+
 from question.question import Question
 from room.room import Room
 from player.player import Player
@@ -6,13 +7,15 @@ from player.player import Player
 class Game:
     """Holds game state. It builds nothing and prints nothing."""
 
-    def __init__(self, player: Player, difficulty: int, rooms: dict[str, Room], questions, start_room: str):
+    def __init__(self, player: Player, difficulty: int, rooms: dict[str, Room], questions, start_room: str, final_trial_progress: list[str] | None = None , won: bool = False):
         self._player = player
         self._difficulty = difficulty
         self._rooms = rooms
         self._questions = questions          # anything with load_question(room, difficulty, character)
         self._room = rooms[start_room]
         self._player.set_position(start_room)
+        self._final_trial_progress = list(final_trial_progress or [])
+        self._won = won
 
     def get_room(self) -> Room:
         return self._room
@@ -63,7 +66,29 @@ class Game:
             "items": self._player.get_items(),
             "position": self._room.get_name(),
             "rooms": rooms,
+            "final_trial_progress": self.get_final_trial_progress(),
+            "won": self.has_won(),
         }
+
+    def get_final_trial_progress(self) -> list[str]:
+        """Return a copy so callers cannot change progress directly."""
+        return self._final_trial_progress.copy()
+
+    def record_final_trial_lens(self, lens: str) -> None:
+        """Record a lens accepted by the final trial."""
+        self._final_trial_progress.append(lens.strip().lower())
+
+    def is_final_trial_complete(self) -> bool:
+        from trial.final_trial import FinalTrial
+
+        return self._final_trial_progress == list(FinalTrial.LENS_ORDER)
+
+    def mark_won(self) -> None:
+        self._won = True
+
+    def has_won(self) -> bool:
+        return self._won
+
 
 
 
